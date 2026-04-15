@@ -2,30 +2,34 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>部品在庫管理</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f7f7f5;color:#111;min-height:100vh}
 .app{max-width:980px;margin:0 auto;padding:16px}
-header{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
-header h1{font-size:17px;font-weight:500;color:#111}
-header .subtitle{font-size:12px;color:#888}
+header{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:17px;font-weight:500}
+header .subtitle{font-size:12px;color:#888;margin-top:2px}
+.qr-fab{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:#1D9E75;color:#fff;border:none;font-size:26px;cursor:pointer;z-index:50;box-shadow:0 4px 16px rgba(29,158,117,.35);display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.qr-fab:hover{transform:scale(1.08)}
 .nav{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .nav button{padding:7px 16px;border-radius:8px;border:0.5px solid #d0d0d0;background:#fff;cursor:pointer;font-size:13px;color:#555;transition:all .15s}
 .nav button.active{background:#1D9E75;color:#fff;border-color:#1D9E75}
 .nav button:hover:not(.active){background:#f0f0f0}
 .section{display:none}.section.active{display:block}
-h2{font-size:15px;font-weight:500;margin-bottom:12px;color:#111}
+h2{font-size:15px;font-weight:500;margin-bottom:12px}
 .search-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
 .search-row input,.search-row select{padding:8px 12px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;background:#fff;color:#111}
-.search-row input:focus,.search-row select:focus{outline:none;border-color:#1D9E75;box-shadow:0 0 0 2px rgba(29,158,117,.12)}
+.search-row input:focus,.search-row select:focus{outline:none;border-color:#1D9E75}
 .search-row input.main{flex:1;min-width:160px}
 .btn{padding:8px 16px;border-radius:8px;border:0.5px solid #d0d0d0;background:#fff;cursor:pointer;font-size:13px;color:#111;transition:all .15s}
 .btn:hover{background:#f0f0f0}
 .btn.primary{background:#1D9E75;color:#fff;border-color:#1D9E75}.btn.primary:hover{background:#178a65}
 .btn.danger{background:#E24B4A;color:#fff;border-color:#E24B4A}.btn.danger:hover{background:#c73d3c}
+.btn.warn{background:#f59e0b;color:#fff;border-color:#f59e0b}
 .btn.small{padding:4px 10px;font-size:12px}
+.btn.lg{padding:12px 24px;font-size:15px;border-radius:10px}
 .card{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:16px;margin-bottom:12px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;padding:9px 10px;color:#666;font-weight:500;border-bottom:0.5px solid #d0d0d0;white-space:nowrap;background:#fafafa}
@@ -35,42 +39,79 @@ tr:hover td{background:#f9fef9}
 .badge.low{background:#FAEEDA;color:#854F0B}
 .badge.ok{background:#E1F5EE;color:#0F6E56}
 .badge.zero{background:#FCEBEB;color:#A32D2D}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;padding:16px}
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:14px;border:0.5px solid #e0e0e0;padding:22px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.modal{background:#fff;border-radius:14px;padding:22px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.15)}
 .modal h3{font-size:15px;font-weight:500;margin-bottom:14px}
 .form-row{margin-bottom:12px}
 .form-row label{display:block;font-size:12px;color:#666;margin-bottom:4px}
 .form-row input,.form-row select,.form-row textarea{width:100%;padding:8px 10px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:14px;background:#fff;color:#111}
-.form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:#1D9E75;box-shadow:0 0 0 2px rgba(29,158,117,.12)}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:#1D9E75}
 .form-row textarea{resize:vertical;min-height:60px}
 .form-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+/* QR Scanner Modal */
+.qr-modal{display:none;position:fixed;inset:0;background:#000;z-index:300;flex-direction:column}
+.qr-modal.open{display:flex}
+.qr-header{display:flex;align-items:center;gap:12px;padding:16px;background:rgba(0,0,0,.8)}
+.qr-header h3{color:#fff;font-size:15px;font-weight:500;flex:1}
+.qr-close{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px 8px}
+.qr-video-wrap{position:relative;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#qr-video{width:100%;height:100%;object-fit:cover}
+.qr-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.qr-frame{width:220px;height:220px;border:2px solid #1D9E75;border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.5)}
+.qr-hint{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:#fff;font-size:13px;padding:0 20px}
+.qr-result-bar{background:rgba(29,158,117,.95);color:#fff;padding:14px 20px;font-size:14px;display:none}
+/* OCR Modal */
+.ocr-modal{display:none;position:fixed;inset:0;background:#000;z-index:400;flex-direction:column}
+.ocr-modal.open{display:flex}
+.ocr-header{display:flex;align-items:center;gap:12px;padding:16px;background:rgba(0,0,0,.8)}
+.ocr-header h3{color:#fff;font-size:15px;font-weight:500;flex:1}
+.ocr-video-wrap{position:relative;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#ocr-video{width:100%;height:100%;object-fit:cover}
+.ocr-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.ocr-frame{width:85%;max-width:400px;height:200px;border:2px solid #f59e0b;border-radius:8px;box-shadow:0 0 0 9999px rgba(0,0,0,.5)}
+.ocr-btn-wrap{padding:16px;background:rgba(0,0,0,.8);display:flex;gap:10px;justify-content:center}
+/* 部品情報表示 */
+.part-info-card{background:#f0fdf8;border:1.5px solid #1D9E75;border-radius:12px;padding:18px;margin-bottom:16px}
+.part-info-card .pi-label{font-size:11px;color:#0F6E56;margin-bottom:2px}
+.part-info-card .pi-value{font-size:15px;font-weight:500;color:#111;margin-bottom:10px}
+.part-info-card .pi-qty{font-size:28px;font-weight:500;color:#1D9E75}
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.stat-card{background:#fff;border-radius:10px;border:0.5px solid #e0e0e0;padding:12px 14px}
+.stat-card .lbl{font-size:11px;color:#888;margin-bottom:4px}
+.stat-card .val{font-size:24px;font-weight:500}
+/* Inout */
 .select-row{display:flex;align-items:center;gap:8px;padding:9px 12px;border:0.5px solid #eee;border-radius:8px;margin-bottom:6px;cursor:pointer;transition:background .1s;background:#fff}
 .select-row:hover{background:#f5fdf9}
 .select-row.selected{background:#E1F5EE;border-color:#1D9E75}
 .select-row input[type=checkbox]{accent-color:#1D9E75;width:16px;height:16px;cursor:pointer;flex-shrink:0}
 .qty-input{width:72px;padding:5px 8px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;text-align:center;background:#fff;color:#111}
-.chip{display:inline-flex;align-items:center;gap:4px;background:#f0f0f0;border-radius:100px;padding:3px 12px;font-size:12px;color:#555}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.stat-card{background:#fff;border-radius:10px;border:0.5px solid #e0e0e0;padding:12px 14px}
-.stat-card .lbl{font-size:11px;color:#888;margin-bottom:4px}
-.stat-card .val{font-size:24px;font-weight:500}
-.empty{text-align:center;padding:36px;color:#999;font-size:14px}
+.chip{display:inline-flex;align-items:center;background:#f0f0f0;border-radius:100px;padding:3px 12px;font-size:12px;color:#555}
+/* History */
 .history-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid #eee}
 .history-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
 .history-icon.in{background:#E1F5EE;color:#0F6E56}
 .history-icon.out{background:#FCEBEB;color:#A32D2D}
 .history-meta{font-size:12px;color:#888;margin-top:2px}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+/* Settings */
 .settings-card{background:#f7f7f5;border-radius:10px;border:0.5px solid #e0e0e0;padding:16px;margin-bottom:12px}
-.settings-card .sc-title{font-weight:500;font-size:14px;margin-bottom:4px;color:#111}
+.settings-card .sc-title{font-weight:500;font-size:14px;margin-bottom:4px}
 .settings-card .sc-desc{font-size:12px;color:#888;margin-bottom:10px}
 .inline-field{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .inline-field input{width:80px;padding:7px 10px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:14px;text-align:center;background:#fff;color:#111}
-.inline-field input:focus{outline:none;border-color:#1D9E75}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+/* Toast */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
+/* Loading */
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.loading-overlay.open{display:flex}
+.spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,.2);border-top-color:#1D9E75;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay p{color:#fff;font-size:14px}
+.empty{text-align:center;padding:36px;color:#999;font-size:14px}
 .warn-row td{background:#FAEEDA !important}
 .zero-row td{background:#FCEBEB !important}
 @media(max-width:640px){
@@ -78,7 +119,6 @@ tr:hover td{background:#f9fef9}
   th:nth-child(4),td:nth-child(4){display:none}
   .form-2col{grid-template-columns:1fr}
   .app{padding:10px}
-  header h1{font-size:15px}
 }
 @media(max-width:480px){
   th:nth-child(5),td:nth-child(5),th:nth-child(6),td:nth-child(6){display:none}
@@ -93,7 +133,6 @@ tr:hover td{background:#f9fef9}
       <div class="subtitle">データはこのブラウザに保存されます</div>
     </div>
   </header>
-
   <div class="nav">
     <button class="active" onclick="showTab('top')">部品検索・在庫</button>
     <button onclick="showTab('inout')">入出庫</button>
@@ -112,10 +151,8 @@ tr:hover td{background:#f9fef9}
     </div>
     <div class="card">
       <div class="search-row">
-        <input class="main" type="text" id="search-input" placeholder="部品番号・部品名・保管場所で検索..." oninput="renderParts()">
-        <select id="loc-filter" onchange="renderParts()">
-          <option value="">保管場所：すべて</option>
-        </select>
+        <input class="main" type="text" id="search-input" placeholder="部品番号・部品名・管理番号・保管場所で検索..." oninput="renderParts()">
+        <select id="loc-filter" onchange="renderParts()"><option value="">保管場所：すべて</option></select>
         <select id="status-filter" onchange="renderParts()">
           <option value="">状態：すべて</option>
           <option value="zero">在庫切れ</option>
@@ -127,7 +164,7 @@ tr:hover td{background:#f9fef9}
       <div style="overflow-x:auto">
         <table>
           <thead><tr>
-            <th>部品番号</th><th>部品名</th><th>点数</th><th>最小在庫</th><th>保管場所</th><th>特記事項</th><th></th>
+            <th>管理番号</th><th>部品番号</th><th>部品名</th><th>点数</th><th>保管場所</th><th>特記事項</th><th></th>
           </tr></thead>
           <tbody id="parts-tbody"></tbody>
         </table>
@@ -140,19 +177,19 @@ tr:hover td{background:#f9fef9}
   <div id="tab-inout" class="section">
     <div class="card">
       <h2>入出庫登録</h2>
-      <div class="toolbar">
-        <input type="text" id="inout-search" placeholder="部品を検索..." oninput="renderInoutList()" style="padding:7px 12px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;width:190px;background:#fff;color:#111">
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+        <input type="text" id="inout-search" placeholder="部品を検索..." oninput="renderInoutList()" style="padding:7px 12px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;flex:1;min-width:140px;background:#fff;color:#111">
         <select id="inout-loc-filter" onchange="renderInoutList()" style="padding:7px 10px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;background:#fff;color:#111">
           <option value="">保管場所：すべて</option>
         </select>
         <span id="selected-count" class="chip">0件選択中</span>
       </div>
       <div id="inout-list"></div>
-      <div id="inout-empty" class="empty" style="display:none">部品がありません。先に部品を追加してください。</div>
+      <div id="inout-empty" class="empty" style="display:none">部品がありません</div>
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:flex-end">
         <div class="form-row" style="margin:0;min-width:110px">
           <label>区分</label>
-          <select id="inout-type" style="padding:8px 10px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;background:#fff;color:#111;width:100%">
+          <select id="inout-type" style="padding:8px 10px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;width:100%;background:#fff;color:#111">
             <option value="in">入庫</option>
             <option value="out">出庫</option>
           </select>
@@ -173,7 +210,7 @@ tr:hover td{background:#f9fef9}
   <div id="tab-history" class="section">
     <div class="card">
       <h2>入出庫履歴</h2>
-      <div class="toolbar">
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
         <select id="hist-filter" onchange="renderHistory()" style="padding:7px 10px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;background:#fff;color:#111">
           <option value="all">すべて</option>
           <option value="in">入庫のみ</option>
@@ -201,10 +238,10 @@ tr:hover td{background:#f9fef9}
       </div>
       <div class="settings-card">
         <div class="sc-title">部品ごとの最小在庫数</div>
-        <div class="sc-desc">部品ごとに個別の警告閾値を設定できます。空欄の場合はグローバル設定が適用されます。</div>
+        <div class="sc-desc">空欄の場合はグローバル設定が適用されます。</div>
         <div style="overflow-x:auto">
           <table>
-            <thead><tr><th>部品番号</th><th>部品名</th><th>現在の点数</th><th>最小在庫数</th><th></th></tr></thead>
+            <thead><tr><th>管理番号</th><th>部品番号</th><th>部品名</th><th>現在</th><th>最小</th><th></th></tr></thead>
             <tbody id="min-stock-tbody"></tbody>
           </table>
         </div>
@@ -235,39 +272,115 @@ tr:hover td{background:#f9fef9}
         <input type="file" id="import-file" accept=".json" onchange="importJSON(event)" style="font-size:13px">
       </div>
       <div style="margin-top:12px;padding:12px;border:0.5px solid #e0e0e0;border-radius:8px;font-size:12px;color:#888;background:#fafafa">
-        データはブラウザのlocalStorageに保存されています。ブラウザのデータ削除時に消去されます。定期的にバックアップをお取りください。
+        データはブラウザのlocalStorageに保存されています。定期的にバックアップをお取りください。
       </div>
     </div>
   </div>
 </div>
 
-<!-- トースト通知 -->
+<!-- QRスキャンFAB -->
+<button class="qr-fab" onclick="openQRScanner()" title="QRコードスキャン">&#9707;</button>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
+
+<!-- Loading -->
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <p id="loading-msg">処理中...</p>
+</div>
+
+<!-- QR Scanner Modal -->
+<div class="qr-modal" id="qr-modal">
+  <div class="qr-header">
+    <h3>QRコードをスキャン</h3>
+    <button class="qr-close" onclick="closeQRScanner()">✕</button>
+  </div>
+  <div class="qr-video-wrap">
+    <video id="qr-video" autoplay playsinline muted></video>
+    <div class="qr-overlay"><div class="qr-frame"></div></div>
+    <div class="qr-hint">QRコードを枠内に合わせてください</div>
+  </div>
+  <div class="qr-result-bar" id="qr-result-bar">
+    <span id="qr-result-text"></span>
+  </div>
+</div>
+
+<!-- 部品情報表示モーダル（登録済み） -->
+<div class="modal-overlay" id="part-found-modal">
+  <div class="modal">
+    <h3>部品情報</h3>
+    <div class="part-info-card" id="part-found-card"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeFoundModal()">閉じる</button>
+      <button class="btn warn" onclick="quickOutFromFound()">出庫する</button>
+    </div>
+  </div>
+</div>
+
+<!-- 出庫確認モーダル -->
+<div class="modal-overlay" id="quick-out-modal">
+  <div class="modal">
+    <h3>出庫登録</h3>
+    <div id="quick-out-info" style="margin-bottom:14px;font-size:13px;color:#555"></div>
+    <div class="form-row">
+      <label>出庫点数</label>
+      <input type="number" id="quick-out-qty" value="1" min="1" style="width:100px">
+    </div>
+    <div class="form-row">
+      <label>メモ（任意）</label>
+      <input type="text" id="quick-out-memo" placeholder="例: 修理に使用">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeQuickOut()">キャンセル</button>
+      <button class="btn danger" onclick="confirmQuickOut()">出庫する</button>
+    </div>
+  </div>
+</div>
+
+<!-- OCR撮影モーダル -->
+<div class="ocr-modal" id="ocr-modal">
+  <div class="ocr-header">
+    <h3>ラベルを撮影してください</h3>
+    <button class="qr-close" onclick="closeOCRModal()">✕</button>
+  </div>
+  <div class="ocr-video-wrap">
+    <video id="ocr-video" autoplay playsinline muted></video>
+    <div class="ocr-overlay"><div class="ocr-frame"></div></div>
+  </div>
+  <div class="ocr-btn-wrap">
+    <button class="btn primary lg" onclick="captureOCR()">撮影して読み取る</button>
+    <button class="btn lg" onclick="skipOCR()">スキップ（手入力）</button>
+  </div>
+  <canvas id="ocr-canvas" style="display:none"></canvas>
+</div>
 
 <!-- 部品追加・編集モーダル -->
 <div class="modal-overlay" id="part-modal">
   <div class="modal">
     <h3 id="modal-title">部品を追加</h3>
+    <div id="ocr-status" style="display:none;background:#E1F5EE;border-radius:8px;padding:10px 12px;font-size:12px;color:#0F6E56;margin-bottom:12px"></div>
+    <div class="form-row"><label>管理番号</label><input type="text" id="f-mgmt" placeholder="例: 00003"></div>
     <div class="form-2col">
-      <div class="form-row"><label>部品番号 *</label><input type="text" id="f-code" placeholder="例: P-001"></div>
-      <div class="form-row"><label>部品名 *</label><input type="text" id="f-name" placeholder="例: ボルト M6×20"></div>
+      <div class="form-row"><label>部品番号 *</label><input type="text" id="f-code" placeholder="例: 1234567"></div>
+      <div class="form-row"><label>部品名 *</label><input type="text" id="f-name" placeholder="例: HDD, 1TB"></div>
     </div>
     <div class="form-2col">
       <div class="form-row"><label>点数</label><input type="number" id="f-qty" value="0" min="0"></div>
       <div class="form-row">
-        <label>最小在庫数 <span style="font-size:11px;color:#999">（空白=グローバル設定）</span></label>
+        <label>最小在庫数 <span style="font-size:11px;color:#999">（空白=グローバル）</span></label>
         <input type="number" id="f-minstock" placeholder="例: 5" min="0">
       </div>
     </div>
     <div class="form-row">
       <label>保管場所</label>
-      <input type="text" id="f-loc" placeholder="例: 棚A-3" list="loc-datalist">
+      <input type="text" id="f-loc" placeholder="例: 倉庫2F-A棚" list="loc-datalist">
       <datalist id="loc-datalist"></datalist>
     </div>
-    <div class="form-row"><label>特記事項</label><textarea id="f-note" placeholder="例: 使用期限あり、要確認"></textarea></div>
+    <div class="form-row"><label>特記事項</label><textarea id="f-note" placeholder="例: 使用期限あり"></textarea></div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal()">キャンセル</button>
-      <button class="btn primary" onclick="savePart()">保存</button>
+      <button class="btn primary" id="save-btn" onclick="savePart()">登録する</button>
     </div>
   </div>
 </div>
@@ -284,10 +397,15 @@ tr:hover td{background:#f9fef9}
   </div>
 </div>
 
+<!-- Tesseract.js + ZXing -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 <script>
-const SK='parts_inv_v2',HK='parts_hist_v2',CFG='parts_cfg_v2';
+const SK='parts_inv_v3',HK='parts_hist_v3',CFG='parts_cfg_v3';
 let parts=[],history=[],cfg={threshold:3};
-let editingId=null,deletingId=null;
+let editingId=null,deletingId=null,foundPartId=null;
+let qrStream=null,ocrStream=null,qrReader=null,qrScanning=false;
+let pendingMgmt=null;
 
 function load(){
   try{parts=JSON.parse(localStorage.getItem(SK)||'[]')}catch(e){parts=[]}
@@ -304,8 +422,14 @@ function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2
 function toast(msg,dur=2500){
   const el=document.getElementById('toast');
   el.textContent=msg;el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),dur);
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove('show'),dur);
 }
+function showLoading(msg='処理中...'){
+  document.getElementById('loading-msg').textContent=msg;
+  document.getElementById('loading').classList.add('open');
+}
+function hideLoading(){document.getElementById('loading').classList.remove('open')}
 
 function getThreshold(p){return(p.minStock!=null&&p.minStock>=0)?p.minStock:cfg.threshold}
 function getStatus(p){
@@ -326,9 +450,7 @@ function showTab(t){
   if(t==='settings'){document.getElementById('global-threshold').value=cfg.threshold;renderMinStock()}
 }
 
-function allLocations(){
-  return[...new Set(parts.map(p=>p.loc||'').filter(Boolean))].sort();
-}
+function allLocations(){return[...new Set(parts.map(p=>p.loc||'').filter(Boolean))].sort()}
 function updateLocFilter(){
   const locs=allLocations();
   const sel=document.getElementById('loc-filter');
@@ -351,7 +473,7 @@ function renderParts(){
   const locF=document.getElementById('loc-filter').value;
   const stF=document.getElementById('status-filter').value;
   const filtered=parts.filter(p=>{
-    const mq=!q||(p.code.toLowerCase().includes(q)||p.name.toLowerCase().includes(q)||(p.loc||'').toLowerCase().includes(q));
+    const mq=!q||((p.mgmt||'').toLowerCase().includes(q)||(p.code||'').toLowerCase().includes(q)||p.name.toLowerCase().includes(q)||(p.loc||'').toLowerCase().includes(q));
     const ml=!locF||(p.loc||'')===locF;
     const ms=!stF||getStatus(p)===stF;
     return mq&&ml&&ms;
@@ -364,15 +486,14 @@ function renderParts(){
   tbody.innerHTML=filtered.map(p=>{
     const st=getStatus(p);
     const badge=st==='zero'?'<span class="badge zero">在庫切れ</span>':st==='low'?'<span class="badge low">少量</span>':'<span class="badge ok">あり</span>';
-    const minTxt=p.minStock!=null&&p.minStock>=0?p.minStock+'点':`<span style="color:#aaa;font-size:11px">G:${cfg.threshold}</span>`;
     const rowCls=st==='zero'?'zero-row':st==='low'?'warn-row':'';
     return`<tr class="${rowCls}">
-      <td style="font-family:monospace;font-size:12px">${esc(p.code)}</td>
+      <td style="font-family:monospace;font-size:12px">${esc(p.mgmt||'—')}</td>
+      <td style="font-family:monospace;font-size:12px">${esc(p.code||'—')}</td>
       <td style="font-weight:500">${esc(p.name)}</td>
       <td>${p.qty}点 ${badge}</td>
-      <td style="text-align:center">${minTxt}</td>
       <td style="color:#666">${esc(p.loc||'—')}</td>
-      <td style="color:#666;font-size:12px;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${esc(p.note||'')}">${esc(p.note||'—')}</td>
+      <td style="color:#666;font-size:12px;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${esc(p.note||'')}">${esc(p.note||'—')}</td>
       <td style="white-space:nowrap">
         <button class="btn small" onclick="openEditModal('${p.id}')" style="margin-right:4px">編集</button>
         <button class="btn small danger" onclick="openDeleteModal('${p.id}')">削除</button>
@@ -387,26 +508,41 @@ function updateStats(){
   document.getElementById('stat-low').textContent=parts.filter(p=>getStatus(p)==='low').length;
 }
 
-function openAddModal(){
+function openAddModal(prefill){
   editingId=null;
   document.getElementById('modal-title').textContent='部品を追加';
-  ['code','name','loc','note'].forEach(f=>document.getElementById('f-'+f).value='');
+  document.getElementById('save-btn').textContent='登録する';
+  ['code','name','loc','note','mgmt'].forEach(f=>document.getElementById('f-'+f).value='');
   document.getElementById('f-qty').value=0;
   document.getElementById('f-minstock').value='';
+  const st=document.getElementById('ocr-status');
+  st.style.display='none';
+  if(prefill){
+    if(prefill.mgmt)document.getElementById('f-mgmt').value=prefill.mgmt;
+    if(prefill.code)document.getElementById('f-code').value=prefill.code;
+    if(prefill.name)document.getElementById('f-name').value=prefill.name;
+    if(prefill.qty)document.getElementById('f-qty').value=prefill.qty;
+    if(prefill.ocrNote){
+      st.textContent='OCR読み取り完了：不足している情報を補完してください';
+      st.style.display='block';
+    }
+  }
   updateLocFilter();
   document.getElementById('part-modal').classList.add('open');
-  setTimeout(()=>document.getElementById('f-code').focus(),100);
 }
 function openEditModal(id){
   const p=parts.find(x=>x.id===id);if(!p)return;
   editingId=id;
   document.getElementById('modal-title').textContent='部品を編集';
-  document.getElementById('f-code').value=p.code;
+  document.getElementById('save-btn').textContent='保存';
+  document.getElementById('f-mgmt').value=p.mgmt||'';
+  document.getElementById('f-code').value=p.code||'';
   document.getElementById('f-name').value=p.name;
   document.getElementById('f-qty').value=p.qty;
   document.getElementById('f-minstock').value=p.minStock!=null?p.minStock:'';
   document.getElementById('f-loc').value=p.loc||'';
   document.getElementById('f-note').value=p.note||'';
+  document.getElementById('ocr-status').style.display='none';
   updateLocFilter();
   document.getElementById('part-modal').classList.add('open');
 }
@@ -414,7 +550,8 @@ function closeModal(){document.getElementById('part-modal').classList.remove('op
 function savePart(){
   const code=document.getElementById('f-code').value.trim();
   const name=document.getElementById('f-name').value.trim();
-  if(!code||!name){alert('部品番号と部品名は必須です');return}
+  if(!name){alert('部品名は必須です');return}
+  const mgmt=document.getElementById('f-mgmt').value.trim();
   const qty=parseInt(document.getElementById('f-qty').value)||0;
   const loc=document.getElementById('f-loc').value.trim();
   const note=document.getElementById('f-note').value.trim();
@@ -422,11 +559,15 @@ function savePart(){
   const minStock=msRaw===''?null:Math.max(0,parseInt(msRaw)||0);
   if(editingId){
     const p=parts.find(x=>x.id===editingId);
-    Object.assign(p,{code,name,qty,loc,note,minStock,updatedAt:new Date().toISOString()});
+    Object.assign(p,{mgmt,code,name,qty,loc,note,minStock,updatedAt:new Date().toISOString()});
     toast('部品を更新しました');
   }else{
-    parts.push({id:uid(),code,name,qty,loc,note,minStock,createdAt:new Date().toISOString()});
-    toast('部品を追加しました');
+    const newPart={id:uid(),mgmt,code,name,qty,loc,note,minStock,createdAt:new Date().toISOString()};
+    parts.push(newPart);
+    if(qty>0){
+      history.unshift({id:uid(),partId:newPart.id,partCode:code,partName:name,partMgmt:mgmt,type:'in',qty,before:0,after:qty,memo:'新規登録入庫',ts:new Date().toISOString()});
+    }
+    toast('部品を登録しました');
   }
   save();closeModal();updateLocFilter();renderParts();
 }
@@ -442,11 +583,193 @@ function confirmDelete(){
   updateLocFilter();renderParts();toast('部品を削除しました');
 }
 
+/* ===================== QR SCANNER ===================== */
+async function openQRScanner(){
+  const modal=document.getElementById('qr-modal');
+  modal.classList.add('open');
+  document.getElementById('qr-result-bar').style.display='none';
+  try{
+    qrStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    const video=document.getElementById('qr-video');
+    video.srcObject=qrStream;
+    await video.play();
+    startQRDecode(video);
+  }catch(e){
+    alert('カメラへのアクセスが拒否されました。ブラウザの設定からカメラを許可してください。');
+    closeQRScanner();
+  }
+}
+function startQRDecode(video){
+  if(typeof ZXing==='undefined'){toast('QRライブラリ読み込み中...お待ちください');return}
+  const hints=new Map();
+  hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[ZXing.BarcodeFormat.QR_CODE]);
+  qrReader=new ZXing.BrowserMultiFormatReader(hints);
+  qrScanning=true;
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  function scan(){
+    if(!qrScanning)return;
+    if(video.readyState===video.HAVE_ENOUGH_DATA){
+      canvas.width=video.videoWidth;
+      canvas.height=video.videoHeight;
+      ctx.drawImage(video,0,0);
+      try{
+        const result=qrReader.decodeFromCanvas(canvas);
+        if(result){
+          qrScanning=false;
+          handleQRResult(result.getText());
+          return;
+        }
+      }catch(e){}
+    }
+    requestAnimationFrame(scan);
+  }
+  scan();
+}
+function closeQRScanner(){
+  qrScanning=false;
+  if(qrStream)qrStream.getTracks().forEach(t=>t.stop());
+  qrStream=null;
+  document.getElementById('qr-modal').classList.remove('open');
+}
+function handleQRResult(mgmtNo){
+  const bar=document.getElementById('qr-result-bar');
+  bar.style.display='block';
+  document.getElementById('qr-result-text').textContent=`管理番号: ${mgmtNo} を検出`;
+  closeQRScanner();
+  pendingMgmt=mgmtNo;
+  const found=parts.find(p=>(p.mgmt||'')=== mgmtNo);
+  if(found){
+    showFoundPart(found);
+  }else{
+    if(confirm(`管理番号「${mgmtNo}」は未登録です。\nラベルを撮影して部品情報を読み取りますか？`)){
+      openOCRModal(mgmtNo);
+    }else{
+      openAddModal({mgmt:mgmtNo});
+    }
+  }
+}
+
+/* ===================== FOUND PART ===================== */
+function showFoundPart(p){
+  foundPartId=p.id;
+  const st=getStatus(p);
+  const badge=st==='zero'?'<span class="badge zero">在庫切れ</span>':st==='low'?'<span class="badge low">少量</span>':'<span class="badge ok">あり</span>';
+  document.getElementById('part-found-card').innerHTML=`
+    <div class="pi-label">管理番号</div><div class="pi-value">${esc(p.mgmt||'—')}</div>
+    <div class="pi-label">部品番号</div><div class="pi-value">${esc(p.code||'—')}</div>
+    <div class="pi-label">部品名</div><div class="pi-value">${esc(p.name)}</div>
+    <div class="pi-label">保管場所</div><div class="pi-value">${esc(p.loc||'—')}</div>
+    ${p.note?`<div class="pi-label">特記事項</div><div class="pi-value" style="font-size:13px">${esc(p.note)}</div>`:''}
+    <div class="pi-label" style="margin-top:8px">現在の在庫</div>
+    <div class="pi-qty">${p.qty}点 ${badge}</div>
+  `;
+  document.getElementById('part-found-modal').classList.add('open');
+}
+function closeFoundModal(){
+  document.getElementById('part-found-modal').classList.remove('open');
+  foundPartId=null;
+}
+function quickOutFromFound(){
+  const p=parts.find(x=>x.id===foundPartId);if(!p)return;
+  document.getElementById('part-found-modal').classList.remove('open');
+  document.getElementById('quick-out-info').textContent=`${p.name}（現在: ${p.qty}点）`;
+  document.getElementById('quick-out-qty').value=1;
+  document.getElementById('quick-out-memo').value='';
+  document.getElementById('quick-out-modal').classList.add('open');
+}
+function closeQuickOut(){document.getElementById('quick-out-modal').classList.remove('open')}
+function confirmQuickOut(){
+  const p=parts.find(x=>x.id===foundPartId);if(!p)return;
+  const qty=parseInt(document.getElementById('quick-out-qty').value)||1;
+  const memo=document.getElementById('quick-out-memo').value.trim();
+  if(p.qty<qty){alert(`在庫不足です（現在: ${p.qty}点）`);return}
+  const before=p.qty;
+  p.qty-=qty;
+  history.unshift({id:uid(),partId:p.id,partCode:p.code,partName:p.name,partMgmt:p.mgmt,type:'out',qty,before,after:p.qty,memo,ts:new Date().toISOString()});
+  save();closeQuickOut();renderParts();
+  toast(`出庫完了: ${p.name} −${qty}点`);
+  foundPartId=null;
+}
+
+/* ===================== OCR ===================== */
+async function openOCRModal(mgmtNo){
+  pendingMgmt=mgmtNo;
+  const modal=document.getElementById('ocr-modal');
+  modal.classList.add('open');
+  try{
+    ocrStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1920},height:{ideal:1080}},audio:false});
+    const video=document.getElementById('ocr-video');
+    video.srcObject=ocrStream;
+    await video.play();
+  }catch(e){
+    alert('カメラへのアクセスが拒否されました。');
+    closeOCRModal();
+    openAddModal({mgmt:mgmtNo});
+  }
+}
+function closeOCRModal(){
+  if(ocrStream)ocrStream.getTracks().forEach(t=>t.stop());
+  ocrStream=null;
+  document.getElementById('ocr-modal').classList.remove('open');
+}
+function skipOCR(){
+  closeOCRModal();
+  openAddModal({mgmt:pendingMgmt});
+}
+async function captureOCR(){
+  const video=document.getElementById('ocr-video');
+  const canvas=document.getElementById('ocr-canvas');
+  canvas.width=video.videoWidth;
+  canvas.height=video.videoHeight;
+  canvas.getContext('2d').drawImage(video,0,0);
+  closeOCRModal();
+  showLoading('ラベルを読み取り中...');
+  try{
+    const {data:{text}}=await Tesseract.recognize(canvas,'eng',{
+      tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- /()#'
+    });
+    hideLoading();
+    const parsed=parseOCRText(text);
+    parsed.mgmt=pendingMgmt;
+    parsed.ocrNote=true;
+    openAddModal(parsed);
+  }catch(e){
+    hideLoading();
+    toast('OCR読み取りに失敗しました。手入力してください。');
+    openAddModal({mgmt:pendingMgmt});
+  }
+}
+function parseOCRText(text){
+  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
+  let code='',name='';
+  for(let i=0;i<lines.length;i++){
+    const l=lines[i];
+    if(/part\s*no/i.test(l)){
+      const next=lines[i+1]||'';
+      const match=next.match(/([A-Z0-9][A-Z0-9\-\/]+)/);
+      if(match)code=match[1];
+    }
+    if(/part\s*name/i.test(l)){
+      const next=lines[i+1]||'';
+      if(next&&!/part/i.test(next))name=next;
+    }
+  }
+  if(!code){
+    for(const l of lines){
+      const m=l.match(/^([A-Z0-9]{5,})/);
+      if(m&&!code)code=m[1];
+    }
+  }
+  return{code,name};
+}
+
+/* ===================== INOUT ===================== */
 function renderInoutList(){
   const q=(document.getElementById('inout-search').value||'').toLowerCase();
   const locF=document.getElementById('inout-loc-filter').value;
   const filtered=parts.filter(p=>{
-    const mq=!q||(p.code.toLowerCase().includes(q)||p.name.toLowerCase().includes(q));
+    const mq=!q||((p.mgmt||'').toLowerCase().includes(q)||(p.code||'').toLowerCase().includes(q)||p.name.toLowerCase().includes(q));
     const ml=!locF||(p.loc||'')===locF;
     return mq&&ml;
   });
@@ -460,10 +783,11 @@ function renderInoutList(){
     return`<div class="select-row" id="sr-${p.id}" onclick="toggleSelect('${p.id}')">
       <input type="checkbox" id="cb-${p.id}" onclick="event.stopPropagation();toggleSelect('${p.id}')">
       <div style="flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:4px;align-items:center">
-        <span style="font-size:11px;color:#888;font-family:monospace">${esc(p.code)}</span>
+        ${p.mgmt?`<span style="font-size:11px;color:#888;font-family:monospace">[${esc(p.mgmt)}]</span>`:''}
+        <span style="font-size:11px;color:#aaa;font-family:monospace">${esc(p.code||'')}</span>
         <span style="font-weight:500">${esc(p.name)}</span>
-        ${p.loc?`<span style="font-size:11px;color:#888">[${esc(p.loc)}]</span>`:''}
-        <span style="font-size:12px;color:#888">(現在: ${p.qty}点)</span>
+        ${p.loc?`<span style="font-size:11px;color:#888">(${esc(p.loc)})</span>`:''}
+        <span style="font-size:12px;color:#888">現在: ${p.qty}点</span>
         ${badge}
       </div>
       <input type="number" id="iq-${p.id}" class="qty-input" value="1" min="1" onclick="event.stopPropagation()">
@@ -499,23 +823,21 @@ function executeInout(){
   });
   if(selected.length===0){toast('部品を選択してください');return}
   const errors=[];
-  selected.forEach(({p,qty})=>{if(type==='out'&&p.qty<qty)errors.push(`${p.name}: 在庫不足 (現在${p.qty}点、出庫${qty}点)`)});
-  if(errors.length>0){alert('在庫不足の部品があります:\n'+errors.join('\n'));return}
+  selected.forEach(({p,qty})=>{if(type==='out'&&p.qty<qty)errors.push(`${p.name}: 在庫不足 (現在${p.qty}点)`)});
+  if(errors.length>0){alert('在庫不足:\n'+errors.join('\n'));return}
   const ts=new Date().toISOString();
   selected.forEach(({p,qty})=>{
     const before=p.qty;
     p.qty=type==='in'?p.qty+qty:p.qty-qty;
-    history.unshift({id:uid(),partId:p.id,partCode:p.code,partName:p.name,type,qty,before,after:p.qty,memo,ts});
+    history.unshift({id:uid(),partId:p.id,partCode:p.code,partName:p.name,partMgmt:p.mgmt,type,qty,before,after:p.qty,memo,ts});
   });
   save();clearInoutSelection();
   document.getElementById('inout-memo').value='';
   renderInoutList();
-  const warn=selected.filter(({p})=>getStatus(p)!=='ok');
-  let msg=`${selected.length}件の${type==='in'?'入庫':'出庫'}を登録しました`;
-  if(warn.length>0)msg+=`\n⚠ ${warn.length}件が少量または在庫切れです`;
-  toast(msg,3000);
+  toast(`${selected.length}件の${type==='in'?'入庫':'出庫'}を登録しました`);
 }
 
+/* ===================== HISTORY ===================== */
 function renderHistory(){
   const filter=document.getElementById('hist-filter').value;
   const list=history.filter(h=>filter==='all'||h.type===filter);
@@ -530,7 +852,10 @@ function renderHistory(){
     return`<div class="history-item">
       <div class="history-icon ${h.type}">${h.type==='in'?'↓':'↑'}</div>
       <div style="flex:1">
-        <div style="font-size:13px"><strong style="font-weight:500">${esc(h.partName)}</strong> <span style="font-family:monospace;font-size:11px;color:#888">${esc(h.partCode)}</span></div>
+        <div style="font-size:13px">
+          <strong style="font-weight:500">${esc(h.partName)}</strong>
+          ${h.partMgmt?`<span style="font-family:monospace;font-size:11px;color:#888;margin-left:6px">[${esc(h.partMgmt)}]</span>`:''}
+        </div>
         <div class="history-meta">${ds}　${sign}${h.qty}点　${h.before}点→${h.after}点${h.memo?' / '+esc(h.memo):''}</div>
       </div>
     </div>`;
@@ -541,6 +866,7 @@ function clearHistory(){
   history=[];save();renderHistory();toast('履歴を削除しました');
 }
 
+/* ===================== SETTINGS ===================== */
 function saveGlobalThreshold(){
   const v=parseInt(document.getElementById('global-threshold').value);
   if(isNaN(v)||v<1){alert('1以上の数値を入力してください');return}
@@ -552,28 +878,26 @@ function renderMinStock(){
   const empty=document.getElementById('min-stock-empty');
   if(parts.length===0){tbody.innerHTML='';empty.style.display='block';return}
   empty.style.display='none';
-  tbody.innerHTML=parts.map(p=>{
-    const ms=p.minStock!=null?p.minStock:'';
-    return`<tr>
-      <td style="font-family:monospace;font-size:12px">${esc(p.code)}</td>
-      <td style="font-weight:500">${esc(p.name)}</td>
-      <td>${p.qty}点</td>
-      <td><input type="number" value="${ms}" placeholder="G:${cfg.threshold}" min="0" id="ms-${p.id}" style="width:90px;padding:5px 8px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;text-align:center;background:#fff;color:#111"></td>
-      <td><button class="btn small" onclick="saveMinStock('${p.id}')">保存</button></td>
-    </tr>`;
-  }).join('');
+  tbody.innerHTML=parts.map(p=>`<tr>
+    <td style="font-family:monospace;font-size:12px">${esc(p.mgmt||'—')}</td>
+    <td style="font-family:monospace;font-size:12px">${esc(p.code||'—')}</td>
+    <td style="font-weight:500">${esc(p.name)}</td>
+    <td>${p.qty}点</td>
+    <td><input type="number" value="${p.minStock!=null?p.minStock:''}" placeholder="G:${cfg.threshold}" min="0" id="ms-${p.id}" style="width:80px;padding:4px 8px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:13px;text-align:center;background:#fff;color:#111"></td>
+    <td><button class="btn small" onclick="saveMinStock('${p.id}')">保存</button></td>
+  </tr>`).join('');
 }
 function saveMinStock(id){
   const p=parts.find(x=>x.id===id);if(!p)return;
   const raw=document.getElementById('ms-'+id).value;
   p.minStock=raw===''?null:Math.max(0,parseInt(raw)||0);
-  save();renderParts();
-  toast(`${p.name} の最小在庫数を設定しました`);
+  save();renderParts();toast(`${p.name} の最小在庫数を設定しました`);
 }
 
+/* ===================== BACKUP ===================== */
 function exportCSV(){
-  const header='部品番号,部品名,点数,最小在庫数,保管場所,特記事項\n';
-  const rows=parts.map(p=>[p.code,p.name,p.qty,p.minStock!=null?p.minStock:'',p.loc||'',p.note||'']
+  const header='管理番号,部品番号,部品名,点数,最小在庫数,保管場所,特記事項\n';
+  const rows=parts.map(p=>[p.mgmt||'',p.code||'',p.name,p.qty,p.minStock!=null?p.minStock:'',p.loc||'',p.note||'']
     .map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
   download('parts_backup_'+dateStr()+'.csv','text/csv;charset=utf-8','\uFEFF'+header+rows);
   toast('CSVをダウンロードしました');
@@ -608,8 +932,9 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
-    document.getElementById('part-modal').classList.remove('open');
-    document.getElementById('del-modal').classList.remove('open');
+    ['part-modal','del-modal','part-found-modal','quick-out-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));
+    closeQRScanner();
+    closeOCRModal();
   }
 });
 
