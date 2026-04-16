@@ -483,6 +483,7 @@ tr:hover td{background:#f9fef9}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 /* ===== 設定 ===== */
 const GAS_URL='https://script.google.com/macros/s/AKfycbwFCskKi_trGV4KzcLWj7D5XVn6AaRh8lMwyfFK2JweBceH8p3NVPqVHADZetpbE5mn8w/exec';
@@ -1070,45 +1071,38 @@ async function captureOCR(){
   const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
   const qrResult=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
   if(qrResult&&qrResult.data){canvas.width=1;canvas.height=1;closeCamModal();handleQRResult(qrResult.data);return}
-  /* 画像を縮小してbase64変換（GASのPOST制限対策） */
-  const resizedCanvas=document.createElement('canvas');
-  const maxW=800;
-  const scale=Math.min(1,maxW/canvas.width);
-  resizedCanvas.width=Math.round(canvas.width*scale);
-  resizedCanvas.height=Math.round(canvas.height*scale);
-  resizedCanvas.getContext('2d').drawImage(canvas,0,0,resizedCanvas.width,resizedCanvas.height);
-  canvas.width=1;canvas.height=1;
-  const dataUrl=resizedCanvas.toDataURL('image/jpeg',0.7);
-  resizedCanvas.width=1;resizedCanvas.height=1;
-  const base64=dataUrl.split(',')[1];
-  console.log('OCR base64 length:', base64?base64.length:'EMPTY');
-  if(!base64||base64.length<100){
-    closeCamModal();
-    toast('画像の取得に失敗しました。再度撮影してください。');
-    openAddModal({mgmt:pendingMgmt||''});
-    return;
-  }
   closeCamModal();
-  showLoading('AIで読み取り中...');
+  showLoading('文字を読み取り中...');
   try{
-    const result=await gasPost('ocr',{base64,mimeType:'image/jpeg'});
-    hideLoading();
-    console.log('OCR result:', JSON.stringify(result));
-    const text=result.text||'';
-    if(!text){
-      toast('AIが文字を検出できませんでした。再スキャンしてください。');
+    /* Step1: Tesseract.jsでブラウザ内OCR（画像送信なし） */
+    const {data:{text:rawText}}=await Tesseract.recognize(canvas,'eng',{
+      tessedit_pageseg_mode:'6'
+    });
+    /* Canvas即破棄 */
+    canvas.width=1;canvas.height=1;
+    console.log('Tesseract raw:', rawText);
+    if(!rawText||rawText.trim().length<2){
+      hideLoading();
+      toast('文字を検出できませんでした。再スキャンしてください。');
       openAddModal({mgmt:pendingMgmt||'',_ocrDone:true,_apiError:true});
       return;
     }
-    const parsed=parseOCRText(text);
+    /* Step2: GASにテキストのみ送信してGeminiで補正 */
+    showLoading('AIで補正中...');
+    const result=await gasPost('correctOCR',{rawText});
+    hideLoading();
+    const corrected=result.text||rawText;
+    console.log('Corrected:', corrected);
+    const parsed=parseOCRText(corrected);
     parsed.mgmt=pendingMgmt||'';
     parsed._ocrDone=true;
-    parsed._rawOCR=text;
+    parsed._rawOCR='【AI補正後】\n'+corrected+'\n\n【OCR生テキスト】\n'+rawText;
     openAddModal(parsed);
   }catch(e){
+    canvas.width=1;canvas.height=1;
     hideLoading();
     console.error('OCR error:', e.message);
-    toast('AI読み取りに失敗しました: '+e.message);
+    toast('読み取りに失敗しました。手入力してください。');
     openAddModal({mgmt:pendingMgmt||'',_ocrDone:true,_apiError:true});
   }
 }
