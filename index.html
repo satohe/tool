@@ -1070,12 +1070,18 @@ async function captureOCR(){
   const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
   const qrResult=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
   if(qrResult&&qrResult.data){canvas.width=1;canvas.height=1;closeCamModal();handleQRResult(qrResult.data);return}
-  /* GAS経由でGemini OCR */
-  const dataUrl=canvas.toDataURL('image/jpeg',0.85);
-  const base64=dataUrl.split(',')[1];
+  /* 画像を縮小してbase64変換（GASのPOST制限対策） */
+  const resizedCanvas=document.createElement('canvas');
+  const maxW=800;
+  const scale=Math.min(1,maxW/canvas.width);
+  resizedCanvas.width=Math.round(canvas.width*scale);
+  resizedCanvas.height=Math.round(canvas.height*scale);
+  resizedCanvas.getContext('2d').drawImage(canvas,0,0,resizedCanvas.width,resizedCanvas.height);
   canvas.width=1;canvas.height=1;
-  /* デバッグ: base64サイズ確認 */
-  console.log('OCR base64 length:', base64 ? base64.length : 'EMPTY');
+  const dataUrl=resizedCanvas.toDataURL('image/jpeg',0.7);
+  resizedCanvas.width=1;resizedCanvas.height=1;
+  const base64=dataUrl.split(',')[1];
+  console.log('OCR base64 length:', base64?base64.length:'EMPTY');
   if(!base64||base64.length<100){
     closeCamModal();
     toast('画像の取得に失敗しました。再度撮影してください。');
