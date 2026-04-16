@@ -29,7 +29,7 @@ h2{font-size:15px;font-weight:500;margin-bottom:12px}
 .btn{padding:8px 16px;border-radius:8px;border:0.5px solid #d0d0d0;background:#fff;cursor:pointer;font-size:13px;color:#111;transition:all .15s}
 .btn:hover{background:#f0f0f0}
 .btn.primary{background:#1D9E75;color:#fff;border-color:#1D9E75}.btn.primary:hover{background:#178a65}
-.btn.danger{background:#E24B4A;color:#fff;border-color:#E24B4A}.btn.danger:hover{background:#c73d3c}
+.btn.danger{background:#E24B4A;color:#fff;border-color:#E24B4A}
 .btn.warn{background:#f59e0b;color:#fff;border-color:#f59e0b}
 .btn.small{padding:4px 10px;font-size:12px}
 .btn.lg{padding:14px 20px;font-size:15px;border-radius:10px;font-weight:500}
@@ -43,7 +43,6 @@ tr:hover td{background:#f9fef9}
 .badge.ok{background:#E1F5EE;color:#0F6E56}
 .badge.zero{background:#FCEBEB;color:#A32D2D}
 .badge.deleted{background:#e5e5e5;color:#666}
-/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
 .modal{background:#fff;border-radius:14px;padding:22px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.15)}
@@ -55,12 +54,10 @@ tr:hover td{background:#f9fef9}
 .form-row textarea{resize:vertical;min-height:60px}
 .form-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
-/* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
 .stat-card{background:#fff;border-radius:10px;border:0.5px solid #e0e0e0;padding:12px 14px}
 .stat-card .lbl{font-size:11px;color:#888;margin-bottom:4px}
 .stat-card .val{font-size:24px;font-weight:500}
-/* INOUT */
 .select-row{display:flex;align-items:center;gap:8px;padding:9px 12px;border:0.5px solid #eee;border-radius:8px;margin-bottom:6px;cursor:pointer;background:#fff;transition:background .1s}
 .select-row:hover{background:#f5fdf9}
 .select-row.selected{background:#E1F5EE;border-color:#1D9E75}
@@ -70,19 +67,16 @@ tr:hover td{background:#f9fef9}
 .qty-ctrl button:hover{background:#f0f0f0}
 .qty-ctrl input{width:52px;padding:4px;border:0.5px solid #d0d0d0;border-radius:6px;font-size:13px;text-align:center;background:#fff;color:#111}
 .chip{display:inline-flex;align-items:center;background:#f0f0f0;border-radius:100px;padding:3px 12px;font-size:12px;color:#555}
-/* HISTORY */
 .history-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid #eee}
 .history-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
 .history-icon.in{background:#E1F5EE;color:#0F6E56}
 .history-icon.out{background:#FCEBEB;color:#A32D2D}
 .history-meta{font-size:12px;color:#888;margin-top:2px}
-/* SETTINGS */
 .settings-card{background:#f7f7f5;border-radius:10px;border:0.5px solid #e0e0e0;padding:16px;margin-bottom:12px}
 .settings-card .sc-title{font-weight:500;font-size:14px;margin-bottom:4px}
 .settings-card .sc-desc{font-size:12px;color:#888;margin-bottom:10px;line-height:1.6}
 .inline-field{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .inline-field input{width:80px;padding:7px 10px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:14px;text-align:center;background:#fff;color:#111}
-/* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
 .empty{text-align:center;padding:36px;color:#999;font-size:14px}
@@ -91,63 +85,77 @@ tr:hover td{background:#f9fef9}
 .dup-warn{background:#FAEEDA;border-radius:8px;padding:8px 12px;font-size:12px;color:#854F0B;margin-bottom:10px}
 .trash-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid #eee;flex-wrap:wrap}
 .csv-preview{max-height:180px;overflow-y:auto;border:0.5px solid #e0e0e0;border-radius:8px;margin-top:8px}
-.csv-preview table{font-size:12px}
-.csv-preview th,.csv-preview td{padding:5px 8px}
-/* QR / OCR CAMERA */
+.csv-preview th,.csv-preview td{padding:5px 8px;font-size:12px}
+.ocr-status{background:#E1F5EE;border-radius:8px;padding:10px 12px;font-size:12px;color:#0F6E56;margin-bottom:12px;display:none}
+
+/* ===== カメラモーダル ===== */
 .cam-modal{display:none;position:fixed;inset:0;background:#000;z-index:300;flex-direction:column}
 .cam-modal.open{display:flex}
-.cam-header{display:flex;align-items:center;padding:14px 16px;background:rgba(0,0,0,.85);gap:12px}
+.cam-header{display:flex;align-items:center;padding:14px 16px;background:rgba(0,0,0,.85);gap:12px;flex-shrink:0}
 .cam-header h3{color:#fff;font-size:15px;font-weight:500;flex:1}
-.cam-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;line-height:1;padding:0 4px}
-.cam-video-wrap{position:relative;flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.cam-video-wrap video{width:100%;height:100%;object-fit:cover}
-/* QRスキャンエリア（中央限定） */
-.qr-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.qr-frame{width:220px;height:220px;position:relative}
-.qr-frame::before{content:'';position:absolute;inset:0;box-shadow:0 0 0 9999px rgba(0,0,0,.55);border-radius:4px}
-.qr-frame-border{position:absolute;inset:0;border:2px solid #1D9E75;border-radius:4px}
-.qr-corner{position:absolute;width:20px;height:20px;border-color:#1D9E75;border-style:solid}
-.qr-corner.tl{top:-1px;left:-1px;border-width:3px 0 0 3px}
-.qr-corner.tr{top:-1px;right:-1px;border-width:3px 3px 0 0}
-.qr-corner.bl{bottom:-1px;left:-1px;border-width:0 0 3px 3px}
-.qr-corner.br{bottom:-1px;right:-1px;border-width:0 3px 3px 0}
-.qr-scan-line{position:absolute;left:4px;right:4px;height:2px;background:linear-gradient(to right,transparent,#1D9E75,transparent);animation:scanline 2s ease-in-out infinite}
-@keyframes scanline{0%,100%{top:10px}50%{top:calc(100% - 10px)}}
-.cam-hint{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:rgba(255,255,255,.8);font-size:13px}
-/* OCRスキャンエリア */
-.ocr-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.ocr-frame{width:88%;max-width:420px;height:190px;position:relative}
-.ocr-frame::before{content:'';position:absolute;inset:0;box-shadow:0 0 0 9999px rgba(0,0,0,.55);border-radius:6px}
-.ocr-frame-border{position:absolute;inset:0;border:2px solid #f59e0b;border-radius:6px}
-.ocr-corner{position:absolute;width:20px;height:20px;border-color:#f59e0b;border-style:solid}
-.ocr-corner.tl{top:-1px;left:-1px;border-width:3px 0 0 3px}
-.ocr-corner.tr{top:-1px;right:-1px;border-width:3px 3px 0 0}
-.ocr-corner.bl{bottom:-1px;left:-1px;border-width:0 0 3px 3px}
-.ocr-corner.br{bottom:-1px;right:-1px;border-width:0 3px 3px 0}
-.cam-footer{padding:16px;background:rgba(0,0,0,.85);display:flex;gap:10px;justify-content:center}
-/* OCR STATUS */
-.ocr-status{background:#E1F5EE;border-radius:8px;padding:10px 12px;font-size:12px;color:#0F6E56;margin-bottom:12px;display:none}
+.cam-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;line-height:1;padding:2px 6px}
+.cam-body{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+/* iOS Safari: video must be playsinline and not full-screen */
+.cam-body video{
+  width:100%;height:100%;object-fit:cover;
+  /* iOS Safari向け追加属性はHTMLで指定 */
+}
+/* QRフレーム */
+.qr-frame-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.qr-box{width:220px;height:220px;position:relative}
+.qr-box::before{content:'';position:absolute;inset:0;box-shadow:0 0 0 9999px rgba(0,0,0,.52);border-radius:4px}
+.qr-box-border{position:absolute;inset:0;border:2px solid #1D9E75;border-radius:4px}
+.qr-c{position:absolute;width:20px;height:20px;border-color:#1D9E75;border-style:solid}
+.qr-c.tl{top:-1px;left:-1px;border-width:3px 0 0 3px}
+.qr-c.tr{top:-1px;right:-1px;border-width:3px 3px 0 0}
+.qr-c.bl{bottom:-1px;left:-1px;border-width:0 0 3px 3px}
+.qr-c.br{bottom:-1px;right:-1px;border-width:0 3px 3px 0}
+.qr-line{position:absolute;left:4px;right:4px;height:2px;background:linear-gradient(to right,transparent,#1D9E75,transparent);animation:scan 2s ease-in-out infinite}
+@keyframes scan{0%,100%{top:8px}50%{top:calc(100% - 8px)}}
+/* OCRフレーム */
+.ocr-box{width:88%;max-width:420px;height:190px;position:relative}
+.ocr-box::before{content:'';position:absolute;inset:0;box-shadow:0 0 0 9999px rgba(0,0,0,.52);border-radius:6px}
+.ocr-box-border{position:absolute;inset:0;border:2px solid #f59e0b;border-radius:6px}
+.ocr-c{position:absolute;width:20px;height:20px;border-color:#f59e0b;border-style:solid}
+.ocr-c.tl{top:-1px;left:-1px;border-width:3px 0 0 3px}
+.ocr-c.tr{top:-1px;right:-1px;border-width:3px 3px 0 0}
+.ocr-c.bl{bottom:-1px;left:-1px;border-width:0 0 3px 3px}
+.ocr-c.br{bottom:-1px;right:-1px;border-width:0 3px 3px 0}
+.cam-hint{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:rgba(255,255,255,.85);font-size:13px;pointer-events:none}
+.cam-status{position:absolute;top:12px;left:0;right:0;text-align:center;pointer-events:none}
+.cam-status span{background:rgba(29,158,117,.9);color:#fff;font-size:12px;padding:4px 14px;border-radius:100px}
+.cam-footer{padding:16px;background:rgba(0,0,0,.85);display:flex;gap:10px;justify-content:center;flex-shrink:0;flex-wrap:wrap}
+
+/* フォールバック */
+.fallback-area{padding:16px;background:rgba(0,0,0,.85);flex-shrink:0;text-align:center}
+.fallback-area p{color:rgba(255,255,255,.7);font-size:12px;margin-bottom:8px}
+.fallback-label{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:rgba(255,255,255,.15);border:0.5px solid rgba(255,255,255,.3);border-radius:8px;color:#fff;font-size:13px;cursor:pointer}
+
 /* LOADING */
 .loading-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px}
 .loading-overlay.open{display:flex}
 .spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,.2);border-top-color:#1D9E75;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-overlay p{color:#fff;font-size:14px}
+
 /* PART INFO */
 .part-info-card{background:#f0fdf8;border:1.5px solid #1D9E75;border-radius:12px;padding:18px;margin-bottom:16px}
 .pi-label{font-size:11px;color:#0F6E56;margin-bottom:2px}
 .pi-value{font-size:15px;font-weight:500;margin-bottom:10px}
 .pi-qty{font-size:30px;font-weight:500;color:#1D9E75;margin-top:4px}
-/* SIMPLE MODE */
+
+/* SIMPLE */
 .simple-wrap{display:none}
 .simple-wrap.open{display:block}
 .quick-input{width:100%;padding:16px;border:1.5px solid #d0d0d0;border-radius:10px;font-size:20px;background:#fff;color:#111;text-align:center;letter-spacing:2px}
 .quick-input:focus{outline:none;border-color:#1D9E75;box-shadow:0 0 0 3px rgba(29,158,117,.12)}
 .quick-result-card{background:#f0fdf8;border:1.5px solid #1D9E75;border-radius:12px;padding:18px;margin-bottom:12px;display:none}
 .quick-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+
 /* FAB */
 .qr-fab{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:#1D9E75;color:#fff;border:none;font-size:24px;cursor:pointer;z-index:50;box-shadow:0 4px 16px rgba(29,158,117,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s}
 .qr-fab:hover{transform:scale(1.08)}
+
 @media(max-width:640px){
   .stats-grid{grid-template-columns:1fr 1fr}
   th:nth-child(4),td:nth-child(4){display:none}
@@ -189,7 +197,6 @@ tr:hover td{background:#f9fef9}
       <button onclick="showTab('backup')">バックアップ</button>
     </div>
 
-    <!-- TOP -->
     <div id="tab-top" class="section active">
       <div class="stats-grid">
         <div class="stat-card"><div class="lbl">部品種類</div><div class="val" id="stat-types">0</div></div>
@@ -219,7 +226,6 @@ tr:hover td{background:#f9fef9}
       </div>
     </div>
 
-    <!-- 入出庫 -->
     <div id="tab-inout" class="section">
       <div class="card">
         <h2>入出庫登録</h2>
@@ -253,7 +259,6 @@ tr:hover td{background:#f9fef9}
       </div>
     </div>
 
-    <!-- 履歴 -->
     <div id="tab-history" class="section">
       <div class="card">
         <h2>入出庫履歴</h2>
@@ -269,7 +274,6 @@ tr:hover td{background:#f9fef9}
       </div>
     </div>
 
-    <!-- ゴミ箱 -->
     <div id="tab-trash" class="section">
       <div class="card">
         <h2>削除済み部品（ゴミ箱）</h2>
@@ -280,7 +284,6 @@ tr:hover td{background:#f9fef9}
       </div>
     </div>
 
-    <!-- 設定 -->
     <div id="tab-settings" class="section">
       <div class="card">
         <h2>設定</h2>
@@ -316,7 +319,6 @@ tr:hover td{background:#f9fef9}
       </div>
     </div>
 
-    <!-- バックアップ -->
     <div id="tab-backup" class="section">
       <div class="card">
         <h2>バックアップ / 復元</h2>
@@ -350,7 +352,7 @@ tr:hover td{background:#f9fef9}
         <div style="margin-top:12px;padding:12px;border:0.5px solid #e0e0e0;border-radius:8px;font-size:12px;color:#888;background:#fafafa" id="last-backup-info">最終バックアップ: 未実施</div>
       </div>
     </div>
-  </div><!-- /normal-wrap -->
+  </div>
 
   <!-- シンプルモード -->
   <div id="simple-wrap" class="simple-wrap">
@@ -378,10 +380,10 @@ tr:hover td{background:#f9fef9}
     </div>
     <div id="simple-recent"></div>
   </div>
-</div><!-- /app -->
+</div>
 
 <!-- QR FAB -->
-<button class="qr-fab" onclick="openQRCam()" title="QRコードスキャン">&#9707;</button>
+<button class="qr-fab" onclick="openCamModal()" title="QR / ラベルスキャン">&#9707;</button>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -392,46 +394,53 @@ tr:hover td{background:#f9fef9}
   <p id="loading-msg">処理中...</p>
 </div>
 
-<!-- QRカメラモーダル -->
-<div class="cam-modal" id="qr-cam">
+<!-- ===== カメラモーダル（QR + OCR 統合） ===== -->
+<div class="cam-modal" id="cam-modal">
   <div class="cam-header">
-    <h3>QRコードをスキャン</h3>
-    <button class="cam-close" onclick="closeQRCam()">✕</button>
+    <h3 id="cam-title">QRコードをスキャン</h3>
+    <button class="cam-close" onclick="closeCamModal()">✕</button>
   </div>
-  <div class="cam-video-wrap">
-    <video id="qr-video" autoplay playsinline muted></video>
-    <div class="qr-overlay">
-      <div class="qr-frame">
-        <div class="qr-frame-border"></div>
-        <div class="qr-corner tl"></div><div class="qr-corner tr"></div>
-        <div class="qr-corner bl"></div><div class="qr-corner br"></div>
-        <div class="qr-scan-line"></div>
+  <div class="cam-body" id="cam-body">
+    <!-- iOS Safari: playsinline必須 / autoplay / muted -->
+    <video id="cam-video" autoplay playsinline muted webkit-playsinline style="width:100%;height:100%;object-fit:cover"></video>
+    <!-- QRフレーム（デフォルト表示） -->
+    <div class="qr-frame-wrap" id="qr-frame">
+      <div class="qr-box">
+        <div class="qr-box-border"></div>
+        <div class="qr-c tl"></div><div class="qr-c tr"></div>
+        <div class="qr-c bl"></div><div class="qr-c br"></div>
+        <div class="qr-line"></div>
       </div>
     </div>
-    <div class="cam-hint">QRコードを枠内に合わせてください</div>
-  </div>
-</div>
-
-<!-- OCRカメラモーダル -->
-<div class="cam-modal" id="ocr-cam">
-  <div class="cam-header">
-    <h3>ラベルを撮影（Part No. / Part Name）</h3>
-    <button class="cam-close" onclick="closeOCRCam()">✕</button>
-  </div>
-  <div class="cam-video-wrap">
-    <video id="ocr-video" autoplay playsinline muted></video>
-    <div class="ocr-overlay">
-      <div class="ocr-frame">
-        <div class="ocr-frame-border"></div>
-        <div class="ocr-corner tl"></div><div class="ocr-corner tr"></div>
-        <div class="ocr-corner bl"></div><div class="ocr-corner br"></div>
+    <!-- OCRフレーム（OCRモード時に表示） -->
+    <div class="qr-frame-wrap" id="ocr-frame" style="display:none">
+      <div class="ocr-box">
+        <div class="ocr-box-border"></div>
+        <div class="ocr-c tl"></div><div class="ocr-c tr"></div>
+        <div class="ocr-c bl"></div><div class="ocr-c br"></div>
       </div>
     </div>
-    <div class="cam-hint">Part No. と Part Name が枠内に収まるように撮影</div>
+    <div class="cam-hint" id="cam-hint">QRコードを枠内に合わせてください</div>
+    <div class="cam-status" id="cam-status" style="display:none">
+      <span id="cam-status-text"></span>
+    </div>
   </div>
-  <div class="cam-footer">
+  <!-- フッター：モードによって切り替え -->
+  <div class="cam-footer" id="cam-footer-qr">
+    <!-- シャッターボタン（静止画解析モード） -->
+    <button class="btn lg" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)" onclick="captureAndDecodeQR()">シャッター（静止画解析）</button>
+  </div>
+  <div class="cam-footer" id="cam-footer-ocr" style="display:none">
     <button class="btn primary lg" onclick="captureOCR()">撮影して読み取る</button>
-    <button class="btn lg" onclick="skipOCR()">スキップ（手入力）</button>
+    <button class="btn lg" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)" onclick="skipOCR()">スキップ（手入力）</button>
+  </div>
+  <!-- フォールバック：カメラ起動失敗 or 解析失敗時 -->
+  <div class="fallback-area" id="fallback-area" style="display:none">
+    <p>カメラが使用できない場合は写真を選択してください</p>
+    <label class="fallback-label">
+      📷 カメラで撮影 / 写真を選択
+      <input type="file" id="fallback-file" accept="image/*" capture="environment" style="display:none" onchange="handleFallbackFile(event)">
+    </label>
   </div>
 </div>
 
@@ -506,11 +515,12 @@ tr:hover td{background:#f9fef9}
   </div>
 </div>
 
-<!-- Tesseract.js + ZXing -->
+<!-- jsQR + Tesseract -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
+
 <script>
-/* ===== STORAGE ===== */
+/* ===== DATA ===== */
 const SK='parts_v5',HK='hist_v5',CFG='cfg_v5',TK='trash_v5';
 let parts=[],history=[],cfg={threshold:3,backupRemindDays:7},trash=[];
 let editingId=null,deletingId=null,foundPartId=null,simpleFoundId=null,csvRows=[];
@@ -522,7 +532,7 @@ function load(){
   try{trash=JSON.parse(localStorage.getItem(TK)||'[]')}catch(e){trash=[]}
 }
 function save(){
-  /* 画像データは一切保存しない — テキスト情報のみ */
+  /* テキスト情報のみ保存。画像データは一切含まない */
   localStorage.setItem(SK,JSON.stringify(parts));
   localStorage.setItem(HK,JSON.stringify(history));
   localStorage.setItem(CFG,JSON.stringify(cfg));
@@ -539,7 +549,6 @@ function toast(msg,dur=2500){
 }
 function showLoading(msg='処理中...'){document.getElementById('loading-msg').textContent=msg;document.getElementById('loading').classList.add('open')}
 function hideLoading(){document.getElementById('loading').classList.remove('open')}
-
 function getThreshold(p){return(p.minStock!=null&&p.minStock>=0)?p.minStock:cfg.threshold}
 function getStatus(p){if(p.qty===0)return'zero';if(p.qty<=getThreshold(p))return'low';return'ok'}
 
@@ -584,7 +593,7 @@ function showTab(t){
   if(t==='backup')checkBackupRemind();
 }
 
-/* ===== FILTERS ===== */
+/* ===== LOC FILTERS ===== */
 function allLocs(){return[...new Set(parts.map(p=>p.loc||'').filter(Boolean))].sort()}
 function updateLocFilter(){
   const locs=allLocs();const sel=document.getElementById('loc-filter');const cur=sel.value;
@@ -599,7 +608,7 @@ function updateInoutLocFilter(){
   if(locs.includes(cur))sel.value=cur;
 }
 
-/* ===== PARTS ===== */
+/* ===== PARTS RENDER ===== */
 function renderParts(){
   const q=(document.getElementById('search-input').value||'').toLowerCase();
   const locF=document.getElementById('loc-filter').value;
@@ -608,8 +617,7 @@ function renderParts(){
     const mq=!q||((p.mgmt||'').toLowerCase().includes(q)||(p.code||'').toLowerCase().includes(q)||p.name.toLowerCase().includes(q)||(p.loc||'').toLowerCase().includes(q));
     return mq&&(!locF||(p.loc||'')===locF)&&(!stF||getStatus(p)===stF);
   });
-  const tbody=document.getElementById('parts-tbody');
-  const empty=document.getElementById('parts-empty');
+  const tbody=document.getElementById('parts-tbody');const empty=document.getElementById('parts-empty');
   updateStats();
   if(!filtered.length){tbody.innerHTML='';empty.style.display='block';return}
   empty.style.display='none';
@@ -637,7 +645,7 @@ function updateStats(){
   document.getElementById('stat-low').textContent=parts.filter(p=>getStatus(p)==='low').length;
 }
 
-/* ===== ADD/EDIT ===== */
+/* ===== ADD / EDIT ===== */
 function checkDup(){
   const code=document.getElementById('f-code').value.trim();
   const mgmt=document.getElementById('f-mgmt').value.trim();
@@ -659,7 +667,7 @@ function openAddModal(pre){
   }
   updateLocFilter();
   document.getElementById('part-modal').classList.add('open');
-  setTimeout(()=>document.getElementById('f-name').focus(),100);
+  setTimeout(()=>document.getElementById('f-name').focus(),150);
 }
 function openEditModal(id){
   const p=parts.find(x=>x.id===id);if(!p)return;
@@ -739,82 +747,287 @@ function emptyTrash(){
   trash=[];save();renderTrash();toast('ゴミ箱を空にしました');
 }
 
-/* ===== QR SCANNER ===== */
-let qrStream=null,qrScanning=false,qrAnimId=null;
-let pendingMgmt=null;
+/* ===== カメラ統合モーダル ===== */
+let camStream=null,camMode='qr',camScanActive=false,camAnimId=null,pendingMgmt=null;
 
-async function openQRCam(){
-  document.getElementById('qr-cam').classList.add('open');
+async function openCamModal(){
+  camMode='qr';
+  document.getElementById('cam-title').textContent='QRコードをスキャン';
+  document.getElementById('qr-frame').style.display='flex';
+  document.getElementById('ocr-frame').style.display='none';
+  document.getElementById('cam-footer-qr').style.display='flex';
+  document.getElementById('cam-footer-ocr').style.display='none';
+  document.getElementById('cam-hint').textContent='QRコードを枠内に合わせてください';
+  document.getElementById('cam-status').style.display='none';
+  document.getElementById('fallback-area').style.display='none';
+  document.getElementById('cam-modal').classList.add('open');
+  await startCamera();
+}
+
+async function startCamera(){
+  stopCamera();
+  const video=document.getElementById('cam-video');
   try{
-    /* カメラ設定固定: 背面 1280×720 */
-    qrStream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false
+    /* iOS Safari向け: 解像度優先、フレームレート指定なし */
+    camStream=await navigator.mediaDevices.getUserMedia({
+      video:{
+        facingMode:{exact:'environment'},
+        width:{ideal:1280},
+        height:{ideal:720}
+      },
+      audio:false
     });
-    const video=document.getElementById('qr-video');
-    video.srcObject=qrStream;
+    video.srcObject=camStream;
+    /* iOS Safari: play()を明示的に呼ぶ */
     await video.play();
-    startQRScan(video);
-  }catch(e){
-    alert('カメラへのアクセスが拒否されました。ブラウザのカメラ許可を確認してください。');
-    closeQRCam();
-  }
-}
-function startQRScan(video){
-  if(typeof ZXing==='undefined'){toast('QRライブラリ読み込み中...しばらくお待ちください');return}
-  qrScanning=true;
-  /* 中央スキャンエリアのみ解析: full解析より高速 */
-  const hints=new Map();
-  hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[ZXing.BarcodeFormat.QR_CODE]);
-  hints.set(ZXing.DecodeHintType.TRY_HARDER,false);
-  const reader=new ZXing.BrowserMultiFormatReader(hints);
-  const canvas=document.createElement('canvas');
-  const ctx=canvas.getContext('2d');
-
-  function scan(){
-    if(!qrScanning)return;
-    if(video.readyState===video.HAVE_ENOUGH_DATA){
-      const vw=video.videoWidth,vh=video.videoHeight;
-      /* 中央220×220px相当の領域だけ切り出して解析 */
-      const side=Math.min(vw,vh)*0.5;
-      const sx=(vw-side)/2,sy=(vh-side)/2;
-      canvas.width=320;canvas.height=320;
-      ctx.drawImage(video,sx,sy,side,side,0,0,320,320);
-      try{
-        const result=reader.decodeFromCanvas(canvas);
-        if(result){
-          qrScanning=false;
-          /* Canvasを即破棄 */
-          canvas.width=1;canvas.height=1;
-          ctx.clearRect(0,0,1,1);
-          handleQRResult(result.getText());
-          return;
-        }
-      }catch(_){}
+    if(camMode==='qr')startQRLoop(video);
+  }catch(e1){
+    /* facingMode: exact が失敗した場合（一部Android等）にフォールバック */
+    try{
+      camStream=await navigator.mediaDevices.getUserMedia({
+        video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},
+        audio:false
+      });
+      video.srcObject=camStream;
+      await video.play();
+      if(camMode==='qr')startQRLoop(video);
+    }catch(e2){
+      /* カメラ取得完全失敗 → フォールバックUI表示 */
+      showFallback('カメラを起動できませんでした。写真を選択してください。');
     }
-    qrAnimId=requestAnimationFrame(scan);
   }
-  qrAnimId=requestAnimationFrame(scan);
 }
-function closeQRCam(){
-  qrScanning=false;
-  if(qrAnimId)cancelAnimationFrame(qrAnimId);
-  if(qrStream)qrStream.getTracks().forEach(t=>t.stop());
-  qrStream=null;
-  document.getElementById('qr-cam').classList.remove('open');
+
+function stopCamera(){
+  camScanActive=false;
+  if(camAnimId){cancelAnimationFrame(camAnimId);camAnimId=null}
+  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null}
 }
-function handleQRResult(mgmtNo){
-  closeQRCam();
-  pendingMgmt=String(mgmtNo).trim();
+
+function closeCamModal(){
+  stopCamera();
+  document.getElementById('cam-modal').classList.remove('open');
+  pendingMgmt=null;
+}
+
+function showFallback(msg){
+  document.getElementById('fallback-area').style.display='block';
+  if(msg)toast(msg,4000);
+}
+function showCamStatus(msg){
+  const el=document.getElementById('cam-status');
+  document.getElementById('cam-status-text').textContent=msg;
+  el.style.display='block';
+  clearTimeout(el._t);el._t=setTimeout(()=>el.style.display='none',2000);
+}
+
+/* ===== jsQR リアルタイムスキャン ===== */
+function startQRLoop(video){
+  camScanActive=true;
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d',{willReadFrequently:true});
+
+  function loop(){
+    if(!camScanActive)return;
+    if(video.readyState===video.HAVE_ENOUGH_DATA&&video.videoWidth>0){
+      const vw=video.videoWidth,vh=video.videoHeight;
+      /* 中央50%の正方形領域のみ解析（高速化） */
+      const side=Math.min(vw,vh)*0.55;
+      const sx=(vw-side)/2,sy=(vh-side)/2;
+      const sz=Math.min(320,Math.round(side));
+      canvas.width=sz;canvas.height=sz;
+      ctx.drawImage(video,sx,sy,side,side,0,0,sz,sz);
+      const imgData=ctx.getImageData(0,0,sz,sz);
+      const result=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'dontInvert'});
+      if(result&&result.data){
+        camScanActive=false;
+        /* Canvas即破棄 */
+        canvas.width=1;canvas.height=1;
+        handleQRResult(result.data);
+        return;
+      }
+    }
+    camAnimId=requestAnimationFrame(loop);
+  }
+  camAnimId=requestAnimationFrame(loop);
+}
+
+/* ===== シャッターボタンによる静止画QR解析 ===== */
+function captureAndDecodeQR(){
+  const video=document.getElementById('cam-video');
+  if(!video.srcObject){showFallback('カメラが起動していません');return}
+  camScanActive=false;
+  const canvas=document.createElement('canvas');
+  canvas.width=video.videoWidth||640;
+  canvas.height=video.videoHeight||480;
+  const ctx=canvas.getContext('2d');
+  ctx.drawImage(video,0,0);
+  /* フル解像度でQR解析（静止画なので時間をかけてOK） */
+  const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
+  const result=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
+  /* Canvas即破棄 */
+  canvas.width=1;canvas.height=1;
+  if(result&&result.data){
+    handleQRResult(result.data);
+  }else{
+    toast('QRコードを検出できませんでした。再度試してください。');
+    /* 再スキャン開始 */
+    if(camStream)startQRLoop(document.getElementById('cam-video'));
+    /* フォールバックも表示 */
+    showFallback();
+  }
+}
+
+/* ===== QR結果処理 ===== */
+function handleQRResult(raw){
+  closeCamModal();
+  pendingMgmt=String(raw).trim();
   const found=parts.find(p=>(p.mgmt||'')===pendingMgmt);
   if(found){
     showFoundPart(found);
   }else{
     if(confirm(`管理番号「${pendingMgmt}」は未登録です。\nラベルを撮影してOCR読み取りしますか？`)){
-      openOCRCam();
+      openOCRMode();
     }else{
       openAddModal({mgmt:pendingMgmt});
     }
   }
+}
+
+/* ===== OCRモードに切り替え ===== */
+async function openOCRMode(){
+  camMode='ocr';
+  document.getElementById('cam-title').textContent='ラベルを撮影（Part No. / Part Name）';
+  document.getElementById('qr-frame').style.display='none';
+  document.getElementById('ocr-frame').style.display='flex';
+  document.getElementById('cam-footer-qr').style.display='none';
+  document.getElementById('cam-footer-ocr').style.display='flex';
+  document.getElementById('cam-hint').textContent='Part No. と Part Name が枠内に収まるように';
+  document.getElementById('fallback-area').style.display='none';
+  document.getElementById('cam-modal').classList.add('open');
+  await startCamera();
+}
+
+function skipOCR(){
+  closeCamModal();
+  openAddModal({mgmt:pendingMgmt});
+}
+
+/* ===== OCR撮影・解析 ===== */
+async function captureOCR(){
+  const video=document.getElementById('cam-video');
+  const vw=video.videoWidth||640,vh=video.videoHeight||480;
+  /* OCR枠（88%幅×190px相当）を切り出す */
+  const frameW=vw*0.88,frameH=Math.round(frameW*(190/420));
+  const sx=(vw-frameW)/2,sy=(vh-frameH)/2;
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.round(frameW);canvas.height=Math.round(frameH);
+  canvas.getContext('2d').drawImage(video,sx,sy,frameW,frameH,0,0,canvas.width,canvas.height);
+  closeCamModal();
+  showLoading('ラベルを読み取り中...');
+
+  /* Step1: まずQR解析を試みる */
+  const ctx=canvas.getContext('2d');
+  const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
+  const qrResult=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
+  if(qrResult&&qrResult.data){
+    canvas.width=1;canvas.height=1;
+    hideLoading();
+    handleQRResult(qrResult.data);
+    return;
+  }
+
+  /* Step2: QR失敗→OCR */
+  try{
+    const {data:{text}}=await Tesseract.recognize(canvas,'eng',{
+      tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- /()#:',
+      tessedit_pageseg_mode:'6'
+    });
+    /* Canvas即破棄（メモリ解放） */
+    canvas.width=1;canvas.height=1;
+    canvas.getContext('2d').clearRect(0,0,1,1);
+    hideLoading();
+    const parsed=parseOCRText(text);
+    parsed.mgmt=pendingMgmt||'';
+    parsed._ocrDone=true;
+    openAddModal(parsed);
+  }catch(e){
+    canvas.width=1;canvas.height=1;
+    hideLoading();
+    toast('OCR読み取りに失敗しました。手入力してください。');
+    openAddModal({mgmt:pendingMgmt||''});
+  }
+}
+
+/* ===== フォールバック: ファイル選択から解析 ===== */
+function handleFallbackFile(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      canvas.width=img.width;canvas.height=img.height;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0);
+      const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
+      /* まずQR解析 */
+      const qrResult=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
+      if(qrResult&&qrResult.data){
+        canvas.width=1;canvas.height=1;
+        closeCamModal();
+        handleQRResult(qrResult.data);
+        return;
+      }
+      /* QR失敗→OCR */
+      closeCamModal();
+      showLoading('ラベルを読み取り中...');
+      Tesseract.recognize(canvas,'eng',{
+        tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- /()#:',
+        tessedit_pageseg_mode:'6'
+      }).then(({data:{text}})=>{
+        canvas.width=1;canvas.height=1;
+        hideLoading();
+        const parsed=parseOCRText(text);
+        parsed.mgmt=pendingMgmt||'';
+        parsed._ocrDone=true;
+        openAddModal(parsed);
+      }).catch(()=>{
+        canvas.width=1;canvas.height=1;
+        hideLoading();
+        toast('読み取りに失敗しました。手入力してください。');
+        openAddModal({mgmt:pendingMgmt||''});
+      });
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+
+/* ===== OCRテキスト解析 ===== */
+function parseOCRText(text){
+  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
+  let code='',name='';
+  for(let i=0;i<lines.length;i++){
+    const l=lines[i];
+    if(/part\s*no\.?/i.test(l)){
+      const next=(lines[i+1]||'').trim();
+      const m=next.match(/([A-Z0-9][A-Z0-9\-\/]{3,})/i);
+      if(m)code=m[1].toUpperCase();
+    }
+    if(/part\s*name\.?/i.test(l)){
+      const next=(lines[i+1]||'').trim();
+      if(next&&!/part/i.test(next))name=next;
+    }
+  }
+  if(!code){
+    for(const l of lines){
+      const m=l.match(/\b(\d{6,})\b/);
+      if(m){code=m[1];break}
+    }
+  }
+  return{code,name};
 }
 
 /* ===== 登録済み部品表示 ===== */
@@ -854,108 +1067,6 @@ function confirmQuickOut(){
   history.unshift({id:uid(),partId:p.id,partCode:p.code,partName:p.name,partMgmt:p.mgmt,type:'out',qty,before,after:p.qty,memo,person,ts:new Date().toISOString()});
   save();closeQuickOut();renderParts();foundPartId=null;
   toast(`出庫完了: ${p.name} −${qty}点`);
-}
-
-/* ===== OCR ===== */
-let ocrStream=null;
-
-async function openOCRCam(){
-  document.getElementById('ocr-cam').classList.add('open');
-  try{
-    /* カメラ設定固定: 背面 1280×720 */
-    ocrStream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false
-    });
-    const video=document.getElementById('ocr-video');
-    video.srcObject=ocrStream;
-    await video.play();
-  }catch(e){
-    alert('カメラへのアクセスが拒否されました。');
-    closeOCRCam();
-    openAddModal({mgmt:pendingMgmt});
-  }
-}
-function closeOCRCam(){
-  if(ocrStream)ocrStream.getTracks().forEach(t=>t.stop());
-  ocrStream=null;
-  document.getElementById('ocr-cam').classList.remove('open');
-}
-function skipOCR(){
-  closeOCRCam();
-  openAddModal({mgmt:pendingMgmt});
-}
-
-async function captureOCR(){
-  const video=document.getElementById('ocr-video');
-  /* ラベル枠（88%×190px相当）を映像から切り出す */
-  const vw=video.videoWidth,vh=video.videoHeight;
-  const frameW=vw*0.88,frameH=Math.round(frameW*(190/420));
-  const sx=(vw-frameW)/2,sy=(vh-frameH)/2;
-  /* 一時Canvasに描画 → OCR → 即破棄 */
-  const canvas=document.createElement('canvas');
-  canvas.width=Math.round(frameW);
-  canvas.height=Math.round(frameH);
-  canvas.getContext('2d').drawImage(video,sx,sy,frameW,frameH,0,0,canvas.width,canvas.height);
-  closeOCRCam();
-  showLoading('ラベルを読み取り中...');
-  try{
-    const {data:{text}}=await Tesseract.recognize(canvas,'eng',{
-      tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,- /()#:',
-      tessedit_pageseg_mode:'6'
-    });
-    /* 即座にCanvasを破棄（メモリ解放） */
-    canvas.width=1;canvas.height=1;
-    canvas.getContext('2d').clearRect(0,0,1,1);
-    hideLoading();
-    const parsed=parseOCRText(text);
-    parsed.mgmt=pendingMgmt;
-    parsed._ocrDone=true;
-    openAddModal(parsed);
-  }catch(e){
-    canvas.width=1;canvas.height=1;
-    hideLoading();
-    toast('OCR読み取りに失敗しました。手入力してください。');
-    openAddModal({mgmt:pendingMgmt});
-  }
-}
-
-/**
- * OCRテキストからPart No.とPart Nameを抽出
- * ラベル形式:
- *   Part No.
- *   1234567
- *   Part Name
- *   HDD, 1TB
- */
-function parseOCRText(text){
-  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
-  let code='',name='';
-
-  for(let i=0;i<lines.length;i++){
-    const l=lines[i];
-    /* Part No. 行を検出 → 次行が値 */
-    if(/part\s*no\.?/i.test(l)){
-      const next=(lines[i+1]||'').trim();
-      /* 英数字・ハイフン混じりのコードを抽出 */
-      const m=next.match(/([A-Z0-9][A-Z0-9\-\/]{3,})/i);
-      if(m)code=m[1].toUpperCase();
-    }
-    /* Part Name 行を検出 → 次行が値 */
-    if(/part\s*name\.?/i.test(l)){
-      const next=(lines[i+1]||'').trim();
-      if(next&&!/part/i.test(next))name=next;
-    }
-  }
-
-  /* フォールバック: Part No.が取れなかった場合、7桁以上の数字列を探す */
-  if(!code){
-    for(const l of lines){
-      const m=l.match(/\b(\d{6,})\b/);
-      if(m){code=m[1];break}
-    }
-  }
-
-  return{code,name};
 }
 
 /* ===== INOUT ===== */
@@ -1004,7 +1115,7 @@ function executeInout(){
   const sel=[];
   parts.forEach(p=>{const cb=document.getElementById('cb-'+p.id);if(cb?.checked)sel.push({p,qty:parseInt(document.getElementById('iq-'+p.id).value)||1})});
   if(!sel.length){toast('部品を選択してください');return}
-  const errs=sel.filter(({p,qty})=>type==='out'&&p.qty<qty).map(({p,qty})=>`${p.name}: 在庫不足（現在${p.qty}点）`);
+  const errs=sel.filter(({p,qty})=>type==='out'&&p.qty<qty).map(({p})=>`${p.name}: 在庫不足`);
   if(errs.length){alert('在庫不足:\n'+errs.join('\n'));return}
   const ts=new Date().toISOString();
   sel.forEach(({p,qty})=>{
@@ -1020,7 +1131,7 @@ function handleQuickEnter(e){
   if(e.key!=='Enter')return;
   const q=document.getElementById('quick-input').value.trim();if(!q)return;
   const found=parts.find(p=>(p.mgmt||'')===q||(p.code||'')===q||p.name===q);
-  if(found){showQuickResult(found)}
+  if(found)showQuickResult(found);
   else{toast('該当する部品が見つかりません');document.getElementById('quick-result-card').style.display='none'}
 }
 function showQuickResult(p){
@@ -1137,7 +1248,7 @@ function previewCSV(e){
   const r=new FileReader();
   r.onload=ev=>{
     const lines=ev.target.result.split(/\r?\n/).filter(l=>l.trim());
-    if(lines.length<2){alert('データが少なすぎます（ヘッダー行＋1行以上必要）');return}
+    if(lines.length<2){alert('データが少なすぎます');return}
     csvRows=lines.slice(1).map(l=>parseCSVLine(l)).filter(r=>r.length>=3&&r[2]);
     const area=document.getElementById('csv-preview-area');const actions=document.getElementById('csv-actions');
     if(!csvRows.length){area.innerHTML='<p style="color:#E24B4A;font-size:12px;margin-top:8px">有効なデータが見つかりませんでした</p>';return}
@@ -1155,8 +1266,7 @@ function importCSV(){
   csvRows.forEach(r=>{
     const[mgmt='',code='',name='',qtyRaw='',loc='',note='']=r;
     if(!name){skipped++;return}
-    const dup=parts.some(p=>(code&&(p.code||'')===code)||(mgmt&&(p.mgmt||'')===mgmt));
-    if(dup){skipped++;return}
+    if(parts.some(p=>(code&&(p.code||'')===code)||(mgmt&&(p.mgmt||'')===mgmt))){skipped++;return}
     const qty=parseInt(qtyRaw)||0;
     const np={id:uid(),mgmt,code,name,qty,loc,note,minStock:null,createdAt:new Date().toISOString()};
     parts.push(np);
@@ -1209,7 +1319,7 @@ function dl(name,type,content){
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     ['part-modal','del-modal','found-modal','quickout-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));
-    closeQRCam();closeOCRCam();
+    closeCamModal();
   }
 });
 
