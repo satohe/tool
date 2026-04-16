@@ -1071,20 +1071,38 @@ async function captureOCR(){
   const qrResult=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
   if(qrResult&&qrResult.data){canvas.width=1;canvas.height=1;closeCamModal();handleQRResult(qrResult.data);return}
   /* GAS経由でGemini OCR */
-  const base64=canvas.toDataURL('image/jpeg',0.85).split(',')[1];
+  const dataUrl=canvas.toDataURL('image/jpeg',0.85);
+  const base64=dataUrl.split(',')[1];
   canvas.width=1;canvas.height=1;
+  /* デバッグ: base64サイズ確認 */
+  console.log('OCR base64 length:', base64 ? base64.length : 'EMPTY');
+  if(!base64||base64.length<100){
+    closeCamModal();
+    toast('画像の取得に失敗しました。再度撮影してください。');
+    openAddModal({mgmt:pendingMgmt||''});
+    return;
+  }
   closeCamModal();
   showLoading('AIで読み取り中...');
   try{
     const result=await gasPost('ocr',{base64,mimeType:'image/jpeg'});
     hideLoading();
-    const parsed=parseOCRText(result.text||'');
+    console.log('OCR result:', JSON.stringify(result));
+    const text=result.text||'';
+    if(!text){
+      toast('AIが文字を検出できませんでした。再スキャンしてください。');
+      openAddModal({mgmt:pendingMgmt||'',_ocrDone:true,_apiError:true});
+      return;
+    }
+    const parsed=parseOCRText(text);
     parsed.mgmt=pendingMgmt||'';
     parsed._ocrDone=true;
+    parsed._rawOCR=text;
     openAddModal(parsed);
   }catch(e){
     hideLoading();
-    toast('AI読み取りに失敗しました。手入力してください。');
+    console.error('OCR error:', e.message);
+    toast('AI読み取りに失敗しました: '+e.message);
     openAddModal({mgmt:pendingMgmt||'',_ocrDone:true,_apiError:true});
   }
 }
