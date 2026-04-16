@@ -486,6 +486,7 @@ tr:hover td{background:#f9fef9}
 <script>
 /* ===== 設定 ===== */
 const GAS_URL='https://script.google.com/macros/s/AKfycbwFCskKi_trGV4KzcLWj7D5XVn6AaRh8lMwyfFK2JweBceH8p3NVPqVHADZetpbE5mn8w/exec';
+const GAS_TOKEN='parts2024secret';
 
 /* ===== ローカルキャッシュ ===== */
 let parts=[],history=[],trash=[],cfg={threshold:3,backupRemindDays:7};
@@ -494,7 +495,7 @@ let pendingMgmt=null,camStream=null,camMode='qr',camScanActive=false,camAnimId=n
 
 /* ===== GAS通信 ===== */
 async function gasPost(action,extra={}){
-  const body=JSON.stringify({action,...extra});
+  const body=JSON.stringify({action,token:GAS_TOKEN,...extra});
   const res=await fetch(GAS_URL,{method:'POST',body,headers:{'Content-Type':'text/plain'}});
   const json=await res.json();
   if(!json.ok)throw new Error(json.error||'GAS error');
