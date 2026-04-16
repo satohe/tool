@@ -11,6 +11,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 header{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 header h1{font-size:17px;font-weight:500}
 header .subtitle{font-size:12px;color:#888;margin-top:2px}
+.sync-badge{font-size:11px;padding:3px 10px;border-radius:100px;background:#E1F5EE;color:#0F6E56}
+.sync-badge.syncing{background:#FAEEDA;color:#854F0B}
+.sync-badge.error{background:#FCEBEB;color:#A32D2D}
 .backup-warn{background:#FAEEDA;border-radius:8px;padding:8px 14px;font-size:12px;color:#854F0B;display:none;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
 .backup-warn.show{display:flex}
 .mode-toggle{display:flex;gap:6px}
@@ -87,20 +90,14 @@ tr:hover td{background:#f9fef9}
 .csv-preview{max-height:180px;overflow-y:auto;border:0.5px solid #e0e0e0;border-radius:8px;margin-top:8px}
 .csv-preview th,.csv-preview td{padding:5px 8px;font-size:12px}
 .ocr-status{background:#E1F5EE;border-radius:8px;padding:10px 12px;font-size:12px;color:#0F6E56;margin-bottom:12px;display:none}
-
-/* ===== カメラモーダル ===== */
+/* カメラ */
 .cam-modal{display:none;position:fixed;inset:0;background:#000;z-index:300;flex-direction:column}
 .cam-modal.open{display:flex}
 .cam-header{display:flex;align-items:center;padding:14px 16px;background:rgba(0,0,0,.85);gap:12px;flex-shrink:0}
 .cam-header h3{color:#fff;font-size:15px;font-weight:500;flex:1}
 .cam-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;line-height:1;padding:2px 6px}
 .cam-body{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-/* iOS Safari: video must be playsinline and not full-screen */
-.cam-body video{
-  width:100%;height:100%;object-fit:cover;
-  /* iOS Safari向け追加属性はHTMLで指定 */
-}
-/* QRフレーム */
+.cam-body video{width:100%;height:100%;object-fit:cover}
 .qr-frame-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .qr-box{width:220px;height:220px;position:relative}
 .qr-box::before{content:'';position:absolute;inset:0;box-shadow:0 0 0 9999px rgba(0,0,0,.52);border-radius:4px}
@@ -112,7 +109,6 @@ tr:hover td{background:#f9fef9}
 .qr-c.br{bottom:-1px;right:-1px;border-width:0 3px 3px 0}
 .qr-line{position:absolute;left:4px;right:4px;height:2px;background:linear-gradient(to right,transparent,#1D9E75,transparent);animation:scan 2s ease-in-out infinite}
 @keyframes scan{0%,100%{top:8px}50%{top:calc(100% - 8px)}}
-/* OCRフレーム */
 .ocr-box{width:88%;max-width:420px;height:190px;position:relative}
 .ocr-box::before{content:'';position:absolute;inset:0;box-shadow:0 0 0 9999px rgba(0,0,0,.52);border-radius:6px}
 .ocr-box-border{position:absolute;inset:0;border:2px solid #f59e0b;border-radius:6px}
@@ -122,40 +118,27 @@ tr:hover td{background:#f9fef9}
 .ocr-c.bl{bottom:-1px;left:-1px;border-width:0 0 3px 3px}
 .ocr-c.br{bottom:-1px;right:-1px;border-width:0 3px 3px 0}
 .cam-hint{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:rgba(255,255,255,.85);font-size:13px;pointer-events:none}
-.cam-status{position:absolute;top:12px;left:0;right:0;text-align:center;pointer-events:none}
-.cam-status span{background:rgba(29,158,117,.9);color:#fff;font-size:12px;padding:4px 14px;border-radius:100px}
 .cam-footer{padding:16px;background:rgba(0,0,0,.85);display:flex;gap:10px;justify-content:center;flex-shrink:0;flex-wrap:wrap}
-
-/* フォールバック */
-.fallback-area{padding:16px;background:rgba(0,0,0,.85);flex-shrink:0;text-align:center}
+.fallback-area{padding:12px 16px;background:rgba(0,0,0,.85);flex-shrink:0;text-align:center;display:none}
 .fallback-area p{color:rgba(255,255,255,.7);font-size:12px;margin-bottom:8px}
 .fallback-label{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:rgba(255,255,255,.15);border:0.5px solid rgba(255,255,255,.3);border-radius:8px;color:#fff;font-size:13px;cursor:pointer}
-
-/* LOADING */
 .loading-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px}
 .loading-overlay.open{display:flex}
 .spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,.2);border-top-color:#1D9E75;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-overlay p{color:#fff;font-size:14px}
-
-/* PART INFO */
 .part-info-card{background:#f0fdf8;border:1.5px solid #1D9E75;border-radius:12px;padding:18px;margin-bottom:16px}
 .pi-label{font-size:11px;color:#0F6E56;margin-bottom:2px}
 .pi-value{font-size:15px;font-weight:500;margin-bottom:10px}
 .pi-qty{font-size:30px;font-weight:500;color:#1D9E75;margin-top:4px}
-
-/* SIMPLE */
 .simple-wrap{display:none}
 .simple-wrap.open{display:block}
 .quick-input{width:100%;padding:16px;border:1.5px solid #d0d0d0;border-radius:10px;font-size:20px;background:#fff;color:#111;text-align:center;letter-spacing:2px}
 .quick-input:focus{outline:none;border-color:#1D9E75;box-shadow:0 0 0 3px rgba(29,158,117,.12)}
 .quick-result-card{background:#f0fdf8;border:1.5px solid #1D9E75;border-radius:12px;padding:18px;margin-bottom:12px;display:none}
 .quick-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-
-/* FAB */
 .qr-fab{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:#1D9E75;color:#fff;border:none;font-size:24px;cursor:pointer;z-index:50;box-shadow:0 4px 16px rgba(29,158,117,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s}
 .qr-fab:hover{transform:scale(1.08)}
-
 @media(max-width:640px){
   .stats-grid{grid-template-columns:1fr 1fr}
   th:nth-child(4),td:nth-child(4){display:none}
@@ -173,11 +156,14 @@ tr:hover td{background:#f9fef9}
   <header>
     <div>
       <h1>部品在庫管理</h1>
-      <div class="subtitle" id="backup-subtitle">データはこのブラウザに保存されます</div>
+      <div class="subtitle">Firestore 共有データベース</div>
     </div>
-    <div class="mode-toggle">
-      <button class="active" onclick="setMode('normal')">通常</button>
-      <button onclick="setMode('simple')">シンプル</button>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="sync-badge" id="sync-badge">接続中...</span>
+      <div class="mode-toggle">
+        <button class="active" onclick="setMode('normal')">通常</button>
+        <button onclick="setMode('simple')">シンプル</button>
+      </div>
     </div>
   </header>
 
@@ -186,7 +172,6 @@ tr:hover td{background:#f9fef9}
     <button class="btn small" onclick="setMode('normal');showTab('backup')">今すぐバックアップ</button>
   </div>
 
-  <!-- 通常モード -->
   <div id="normal-wrap">
     <div class="nav">
       <button class="active" onclick="showTab('top')">部品検索・在庫</button>
@@ -330,7 +315,7 @@ tr:hover td{background:#f9fef9}
           </div>
           <div class="settings-card">
             <div class="sc-title">JSONエクスポート</div>
-            <div class="sc-desc">全データ（履歴・設定含む）をJSON形式で保存</div>
+            <div class="sc-desc">全データ（履歴含む）をJSON形式で保存</div>
             <button class="btn primary" onclick="exportJSON()">JSONダウンロード</button>
           </div>
         </div>
@@ -344,17 +329,11 @@ tr:hover td{background:#f9fef9}
             <button class="btn" onclick="cancelCSV()">キャンセル</button>
           </div>
         </div>
-        <div class="settings-card">
-          <div class="sc-title">JSONインポート（復元）</div>
-          <div class="sc-desc">以前エクスポートしたJSONファイルからデータを復元します</div>
-          <input type="file" id="import-file" accept=".json" onchange="importJSON(event)" style="font-size:13px">
-        </div>
         <div style="margin-top:12px;padding:12px;border:0.5px solid #e0e0e0;border-radius:8px;font-size:12px;color:#888;background:#fafafa" id="last-backup-info">最終バックアップ: 未実施</div>
       </div>
     </div>
   </div>
 
-  <!-- シンプルモード -->
   <div id="simple-wrap" class="simple-wrap">
     <div class="card">
       <div style="font-size:13px;color:#666;margin-bottom:8px;text-align:center">管理番号または部品番号を入力してEnter</div>
@@ -382,28 +361,18 @@ tr:hover td{background:#f9fef9}
   </div>
 </div>
 
-<!-- QR FAB -->
 <button class="qr-fab" onclick="openCamModal()" title="QR / ラベルスキャン">&#9707;</button>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
+<div class="loading-overlay" id="loading"><div class="spinner"></div><p id="loading-msg">処理中...</p></div>
 
-<!-- LOADING -->
-<div class="loading-overlay" id="loading">
-  <div class="spinner"></div>
-  <p id="loading-msg">処理中...</p>
-</div>
-
-<!-- ===== カメラモーダル（QR + OCR 統合） ===== -->
+<!-- カメラモーダル -->
 <div class="cam-modal" id="cam-modal">
   <div class="cam-header">
     <h3 id="cam-title">QRコードをスキャン</h3>
     <button class="cam-close" onclick="closeCamModal()">✕</button>
   </div>
   <div class="cam-body" id="cam-body">
-    <!-- iOS Safari: playsinline必須 / autoplay / muted -->
     <video id="cam-video" autoplay playsinline muted webkit-playsinline style="width:100%;height:100%;object-fit:cover"></video>
-    <!-- QRフレーム（デフォルト表示） -->
     <div class="qr-frame-wrap" id="qr-frame">
       <div class="qr-box">
         <div class="qr-box-border"></div>
@@ -412,7 +381,6 @@ tr:hover td{background:#f9fef9}
         <div class="qr-line"></div>
       </div>
     </div>
-    <!-- OCRフレーム（OCRモード時に表示） -->
     <div class="qr-frame-wrap" id="ocr-frame" style="display:none">
       <div class="ocr-box">
         <div class="ocr-box-border"></div>
@@ -421,21 +389,15 @@ tr:hover td{background:#f9fef9}
       </div>
     </div>
     <div class="cam-hint" id="cam-hint">QRコードを枠内に合わせてください</div>
-    <div class="cam-status" id="cam-status" style="display:none">
-      <span id="cam-status-text"></span>
-    </div>
   </div>
-  <!-- フッター：モードによって切り替え -->
   <div class="cam-footer" id="cam-footer-qr">
-    <!-- シャッターボタン（静止画解析モード） -->
     <button class="btn lg" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)" onclick="captureAndDecodeQR()">シャッター（静止画解析）</button>
   </div>
   <div class="cam-footer" id="cam-footer-ocr" style="display:none">
     <button class="btn primary lg" onclick="captureOCR()">撮影して読み取る</button>
     <button class="btn lg" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)" onclick="skipOCR()">スキップ（手入力）</button>
   </div>
-  <!-- フォールバック：カメラ起動失敗 or 解析失敗時 -->
-  <div class="fallback-area" id="fallback-area" style="display:none">
+  <div class="fallback-area" id="fallback-area">
     <p>カメラが使用できない場合は写真を選択してください</p>
     <label class="fallback-label">
       📷 カメラで撮影 / 写真を選択
@@ -444,7 +406,7 @@ tr:hover td{background:#f9fef9}
   </div>
 </div>
 
-<!-- 登録済み部品表示モーダル -->
+<!-- 登録済み部品モーダル -->
 <div class="modal-overlay" id="found-modal">
   <div class="modal">
     <h3>部品情報</h3>
@@ -483,7 +445,7 @@ tr:hover td{background:#f9fef9}
     <h3 id="modal-title">部品を追加</h3>
     <div class="dup-warn" id="dup-code-warn" style="display:none">⚠ 同じ部品番号がすでに登録されています</div>
     <div class="dup-warn" id="dup-mgmt-warn" style="display:none">⚠ 同じ管理番号がすでに登録されています</div>
-    <div class="ocr-status" id="ocr-status">OCR読み取り完了 — 内容を確認して不足分を補完してください</div>
+    <div class="ocr-status" id="ocr-status"></div>
     <div id="rescan-bar" style="display:none;margin-bottom:12px;gap:8px;flex-wrap:wrap;align-items:center;background:#fff8e1;border:0.5px solid #f59e0b;border-radius:8px;padding:10px 12px">
       <span style="font-size:12px;color:#854F0B;flex:1">OCRがうまく読み取れませんでしたか？</span>
       <button class="btn small" style="background:#f59e0b;color:#fff;border-color:#f59e0b" onclick="rescanOCR()">再スキャン</button>
@@ -520,32 +482,51 @@ tr:hover td{background:#f9fef9}
   </div>
 </div>
 
-<!-- jsQR + Tesseract -->
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-
 <script>
-/* ===== DATA ===== */
-const SK='parts_v5',HK='hist_v5',CFG='cfg_v5',TK='trash_v5';
-let parts=[],history=[],cfg={threshold:3,backupRemindDays:7},trash=[];
-let editingId=null,deletingId=null,foundPartId=null,simpleFoundId=null,csvRows=[];
+/* ===== 設定 ===== */
+const GAS_URL='https://script.google.com/macros/s/AKfycbwFCskKi_trGV4KzcLWj7D5XVn6AaRh8lMwyfFK2JweBceH8p3NVPqVHADZetpbE5mn8w/exec';
 
-function load(){
-  try{parts=JSON.parse(localStorage.getItem(SK)||'[]')}catch(e){parts=[]}
-  try{history=JSON.parse(localStorage.getItem(HK)||'[]')}catch(e){history=[]}
-  try{cfg=Object.assign({threshold:3,backupRemindDays:7},JSON.parse(localStorage.getItem(CFG)||'{}'))}catch(e){}
-  try{trash=JSON.parse(localStorage.getItem(TK)||'[]')}catch(e){trash=[]}
+/* ===== ローカルキャッシュ ===== */
+let parts=[],history=[],trash=[],cfg={threshold:3,backupRemindDays:7};
+let editingId=null,deletingId=null,foundPartId=null,simpleFoundId=null,csvRows=[];
+let pendingMgmt=null,camStream=null,camMode='qr',camScanActive=false,camAnimId=null;
+
+/* ===== GAS通信 ===== */
+async function gasPost(action,extra={}){
+  const body=JSON.stringify({action,...extra});
+  const res=await fetch(GAS_URL,{method:'POST',body,headers:{'Content-Type':'text/plain'}});
+  const json=await res.json();
+  if(!json.ok)throw new Error(json.error||'GAS error');
+  return json.data;
 }
-function save(){
-  /* テキスト情報のみ保存。画像データは一切含まない */
-  localStorage.setItem(SK,JSON.stringify(parts));
-  localStorage.setItem(HK,JSON.stringify(history));
-  localStorage.setItem(CFG,JSON.stringify(cfg));
-  localStorage.setItem(TK,JSON.stringify(trash));
+
+function setSyncBadge(state,msg){
+  const el=document.getElementById('sync-badge');
+  el.className='sync-badge'+(state==='ok'?'':state==='syncing'?' syncing':' error');
+  el.textContent=msg;
 }
+
+/* ===== 初期ロード ===== */
+async function initLoad(){
+  setSyncBadge('syncing','同期中...');
+  try{
+    const [p,h,c]=await Promise.all([gasPost('getParts'),gasPost('getHistory'),gasPost('getConfig')]);
+    parts=p||[];
+    history=(h||[]).sort((a,b)=>new Date(b.ts)-new Date(a.ts));
+    cfg=Object.assign({threshold:3,backupRemindDays:7},c);
+    setSyncBadge('ok','同期済み');
+    updateLocFilter();renderParts();checkBackupRemind();
+  }catch(e){
+    setSyncBadge('error','接続エラー');
+    toast('Firestoreへの接続に失敗しました: '+e.message,4000);
+  }
+}
+
+/* ===== ユーティリティ ===== */
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function dateStr(){return new Date().toISOString().slice(0,10).replace(/-/g,'')}
-
 function toast(msg,dur=2500){
   const el=document.getElementById('toast');
   el.textContent=msg;el.classList.add('show');
@@ -556,7 +537,7 @@ function hideLoading(){document.getElementById('loading').classList.remove('open
 function getThreshold(p){return(p.minStock!=null&&p.minStock>=0)?p.minStock:cfg.threshold}
 function getStatus(p){if(p.qty===0)return'zero';if(p.qty<=getThreshold(p))return'low';return'ok'}
 
-/* ===== MODE ===== */
+/* ===== モード ===== */
 function setMode(m){
   document.getElementById('normal-wrap').style.display=m==='normal'?'block':'none';
   document.getElementById('simple-wrap').className='simple-wrap'+(m==='simple'?' open':'');
@@ -564,7 +545,7 @@ function setMode(m){
   if(m==='simple'){setTimeout(()=>document.getElementById('quick-input').focus(),100);renderSimpleRecent()}
 }
 
-/* ===== BACKUP REMIND ===== */
+/* ===== バックアップリマインド ===== */
 function checkBackupRemind(){
   const last=cfg.lastBackupAt,days=cfg.backupRemindDays||7;
   const info=document.getElementById('last-backup-info');
@@ -572,17 +553,18 @@ function checkBackupRemind(){
   const diff=Math.floor((Date.now()-new Date(last))/(864e5));
   const ds=new Date(last).toLocaleDateString('ja-JP');
   info.textContent=`最終バックアップ: ${ds}（${diff}日前）`;
-  document.getElementById('backup-subtitle').textContent=`最終バックアップ: ${ds}`;
   if(diff>=days){document.getElementById('backup-days').textContent=diff;document.getElementById('backup-warn').classList.add('show')}
-  else{document.getElementById('backup-warn').classList.remove('show')}
+  else document.getElementById('backup-warn').classList.remove('show');
 }
-function saveBackupRemind(){
+async function saveBackupRemind(){
   const v=parseInt(document.getElementById('backup-remind-days').value);
   if(isNaN(v)||v<1){alert('1以上の数値を入力してください');return}
-  cfg.backupRemindDays=v;save();toast(`${v}日経過で警告するよう設定しました`);
+  cfg.backupRemindDays=v;
+  await gasPost('saveConfig',{data:cfg});
+  toast(`${v}日経過で警告するよう設定しました`);
 }
 
-/* ===== TAB ===== */
+/* ===== タブ ===== */
 function showTab(t){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
@@ -597,22 +579,22 @@ function showTab(t){
   if(t==='backup')checkBackupRemind();
 }
 
-/* ===== LOC FILTERS ===== */
+/* ===== フィルター ===== */
 function allLocs(){return[...new Set(parts.map(p=>p.loc||'').filter(Boolean))].sort()}
 function updateLocFilter(){
-  const locs=allLocs();const sel=document.getElementById('loc-filter');const cur=sel.value;
-  sel.innerHTML='<option value="">保管場所：すべて</option>'+locs.map(l=>`<option value="${esc(l)}">${esc(l)}</option>`).join('');
-  if(locs.includes(cur))sel.value=cur;
+  const locs=allLocs();
+  ['loc-filter','inout-loc-filter'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    const cur=sel.value;
+    sel.innerHTML='<option value="">保管場所：すべて</option>'+locs.map(l=>`<option value="${esc(l)}">${esc(l)}</option>`).join('');
+    if(locs.includes(cur))sel.value=cur;
+  });
   const dl=document.getElementById('loc-datalist');
   if(dl)dl.innerHTML=locs.map(l=>`<option value="${esc(l)}">`).join('');
 }
-function updateInoutLocFilter(){
-  const locs=allLocs();const sel=document.getElementById('inout-loc-filter');const cur=sel.value;
-  sel.innerHTML='<option value="">保管場所：すべて</option>'+locs.map(l=>`<option value="${esc(l)}">${esc(l)}</option>`).join('');
-  if(locs.includes(cur))sel.value=cur;
-}
+function updateInoutLocFilter(){updateLocFilter()}
 
-/* ===== PARTS RENDER ===== */
+/* ===== 部品一覧 ===== */
 function renderParts(){
   const q=(document.getElementById('search-input').value||'').toLowerCase();
   const locF=document.getElementById('loc-filter').value;
@@ -649,7 +631,7 @@ function updateStats(){
   document.getElementById('stat-low').textContent=parts.filter(p=>getStatus(p)==='low').length;
 }
 
-/* ===== ADD / EDIT ===== */
+/* ===== 部品追加・編集 ===== */
 function checkDup(){
   const code=document.getElementById('f-code').value.trim();
   const mgmt=document.getElementById('f-mgmt').value.trim();
@@ -668,20 +650,14 @@ function openAddModal(pre){
   document.getElementById('rescan-bar').style.display='none';
   if(pre){
     Object.keys(pre).filter(k=>!k.startsWith('_')).forEach(k=>{
-      const el=document.getElementById('f-'+k);
-      if(el&&pre[k]!=null)el.value=pre[k];
+      const el=document.getElementById('f-'+k);if(el&&pre[k]!=null)el.value=pre[k];
     });
     if(pre._ocrDone){
       const st=document.getElementById('ocr-status');
       st.style.display='block';
-      if(pre._apiError){
-        st.style.background='#FAEEDA';st.style.color='#854F0B';
-        st.textContent='AI読み取りに失敗しました。手入力してください（'+pre._apiError+'）';
-      }else{
-        st.style.background='';st.style.color='';
-        st.textContent='AI読み取り完了 — 内容を確認して不足分を補完してください';
-      }
-      /* 再スキャンバーを表示 */
+      st.style.background=pre._apiError?'#FAEEDA':'#E1F5EE';
+      st.style.color=pre._apiError?'#854F0B':'#0F6E56';
+      st.textContent=pre._apiError?'AI読み取りに失敗しました。手入力してください':'AI読み取り完了 — 内容を確認して不足分を補完してください';
       document.getElementById('rescan-bar').style.display='flex';
     }
   }
@@ -700,11 +676,12 @@ function openEditModal(id){
   document.getElementById('dup-code-warn').style.display='none';
   document.getElementById('dup-mgmt-warn').style.display='none';
   document.getElementById('ocr-status').style.display='none';
+  document.getElementById('rescan-bar').style.display='none';
   updateLocFilter();
   document.getElementById('part-modal').classList.add('open');
 }
 function closeModal(){document.getElementById('part-modal').classList.remove('open')}
-function savePart(){
+async function savePart(){
   const name=document.getElementById('f-name').value.trim();
   if(!name){alert('部品名は必須です');return}
   const code=document.getElementById('f-code').value.trim();
@@ -714,29 +691,53 @@ function savePart(){
   const note=document.getElementById('f-note').value.trim();
   const msRaw=document.getElementById('f-minstock').value;
   const minStock=msRaw===''?null:Math.max(0,parseInt(msRaw)||0);
-  if(editingId){
-    Object.assign(parts.find(x=>x.id===editingId),{mgmt,code,name,qty,loc,note,minStock,updatedAt:new Date().toISOString()});
-    toast('部品を更新しました');
-  }else{
-    const np={id:uid(),mgmt,code,name,qty,loc,note,minStock,createdAt:new Date().toISOString()};
-    parts.push(np);
-    if(qty>0)history.unshift({id:uid(),partId:np.id,partCode:code,partName:name,partMgmt:mgmt,type:'in',qty,before:0,after:qty,memo:'新規登録入庫',person:'',ts:new Date().toISOString()});
-    toast('部品を登録しました');
-  }
-  save();closeModal();updateLocFilter();renderParts();
+  showLoading('保存中...');
+  try{
+    if(editingId){
+      const p=parts.find(x=>x.id===editingId);
+      Object.assign(p,{mgmt,code,name,qty,loc,note,minStock,updatedAt:new Date().toISOString()});
+      await gasPost('savePart',{data:p});
+      toast('部品を更新しました');
+    }else{
+      const np={id:uid(),mgmt,code,name,qty,loc,note,minStock,createdAt:new Date().toISOString()};
+      parts.push(np);
+      await gasPost('savePart',{data:np});
+      if(qty>0){
+        const h={id:uid(),partId:np.id,partCode:code,partName:name,partMgmt:mgmt,type:'in',qty,before:0,after:qty,memo:'新規登録入庫',person:'',ts:new Date().toISOString()};
+        history.unshift(h);
+        await gasPost('saveHistory',{data:h});
+      }
+      toast('部品を登録しました');
+    }
+    setSyncBadge('ok','同期済み');
+    closeModal();updateLocFilter();renderParts();
+  }catch(e){
+    setSyncBadge('error','同期エラー');
+    toast('保存に失敗しました: '+e.message);
+  }finally{hideLoading()}
 }
 
-/* ===== DELETE / TRASH ===== */
+/* ===== 削除・ゴミ箱 ===== */
 function openDeleteModal(id){
   deletingId=id;const p=parts.find(x=>x.id===id);
   document.getElementById('del-name').textContent=p?`「${p.name}」を削除します。`:'';
   document.getElementById('del-modal').classList.add('open');
 }
 function closeDelModal(){document.getElementById('del-modal').classList.remove('open')}
-function confirmDelete(){
+async function confirmDelete(){
   const p=parts.find(x=>x.id===deletingId);
-  if(p){trash.unshift({...p,deletedAt:new Date().toISOString()});parts=parts.filter(x=>x.id!==deletingId);save()}
-  closeDelModal();updateLocFilter();renderParts();toast('ゴミ箱に移動しました');
+  if(!p){closeDelModal();return}
+  showLoading('削除中...');
+  try{
+    await gasPost('deletePart',{id:p.id});
+    trash.unshift({...p,deletedAt:new Date().toISOString()});
+    parts=parts.filter(x=>x.id!==deletingId);
+    setSyncBadge('ok','同期済み');
+    closeDelModal();updateLocFilter();renderParts();toast('ゴミ箱に移動しました');
+  }catch(e){
+    setSyncBadge('error','同期エラー');
+    toast('削除に失敗しました: '+e.message);
+  }finally{hideLoading()}
 }
 function renderTrash(){
   const el=document.getElementById('trash-list');const empty=document.getElementById('trash-empty');
@@ -748,451 +749,27 @@ function renderTrash(){
       <div style="font-size:12px;color:#888">${esc(p.code||'—')} / 管理番号: ${esc(p.mgmt||'—')} / 削除日: ${new Date(p.deletedAt).toLocaleDateString('ja-JP')}</div>
     </div>
     <button class="btn small primary" onclick="restorePart('${p.id}')">復元</button>
-    <button class="btn small danger" onclick="permDelete('${p.id}')">完全削除</button>
   </div>`).join('');
 }
-function restorePart(id){
+async function restorePart(id){
   const i=trash.findIndex(x=>x.id===id);if(i===-1)return;
   const p={...trash[i]};delete p.deletedAt;
-  parts.push(p);trash.splice(i,1);save();renderTrash();updateLocFilter();renderParts();
-  toast(`「${p.name}」を復元しました`);
-}
-function permDelete(id){
-  if(!confirm('完全に削除します。この操作は元に戻せません。'))return;
-  trash=trash.filter(x=>x.id!==id);save();renderTrash();toast('完全に削除しました');
+  showLoading('復元中...');
+  try{
+    await gasPost('savePart',{data:p});
+    parts.push(p);trash.splice(i,1);
+    setSyncBadge('ok','同期済み');
+    renderTrash();updateLocFilter();renderParts();toast(`「${p.name}」を復元しました`);
+  }catch(e){toast('復元に失敗しました: '+e.message)}
+  finally{hideLoading()}
 }
 function emptyTrash(){
   if(!trash.length){toast('ゴミ箱は空です');return}
-  if(!confirm(`ゴミ箱の${trash.length}件をすべて完全削除します。この操作は元に戻せません。`))return;
-  trash=[];save();renderTrash();toast('ゴミ箱を空にしました');
+  if(!confirm(`ゴミ箱の${trash.length}件をすべて削除します。この操作は元に戻せません。`))return;
+  trash=[];renderTrash();toast('ゴミ箱を空にしました');
 }
 
-/* ===== カメラ統合モーダル ===== */
-let camStream=null,camMode='qr',camScanActive=false,camAnimId=null,pendingMgmt=null;
-
-async function openCamModal(){
-  camMode='qr';
-  document.getElementById('cam-title').textContent='QRコードをスキャン';
-  document.getElementById('qr-frame').style.display='flex';
-  document.getElementById('ocr-frame').style.display='none';
-  document.getElementById('cam-footer-qr').style.display='flex';
-  document.getElementById('cam-footer-ocr').style.display='none';
-  document.getElementById('cam-hint').textContent='QRコードを枠内に合わせてください';
-  document.getElementById('cam-status').style.display='none';
-  document.getElementById('fallback-area').style.display='none';
-  document.getElementById('cam-modal').classList.add('open');
-  await startCamera();
-}
-
-async function startCamera(){
-  stopCamera();
-  const video=document.getElementById('cam-video');
-  try{
-    /* iOS Safari向け: 解像度優先、フレームレート指定なし */
-    camStream=await navigator.mediaDevices.getUserMedia({
-      video:{
-        facingMode:{exact:'environment'},
-        width:{ideal:1280},
-        height:{ideal:720}
-      },
-      audio:false
-    });
-    video.srcObject=camStream;
-    /* iOS Safari: play()を明示的に呼ぶ */
-    await video.play();
-    if(camMode==='qr')startQRLoop(video);
-  }catch(e1){
-    /* facingMode: exact が失敗した場合（一部Android等）にフォールバック */
-    try{
-      camStream=await navigator.mediaDevices.getUserMedia({
-        video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},
-        audio:false
-      });
-      video.srcObject=camStream;
-      await video.play();
-      if(camMode==='qr')startQRLoop(video);
-    }catch(e2){
-      /* カメラ取得完全失敗 → フォールバックUI表示 */
-      showFallback('カメラを起動できませんでした。写真を選択してください。');
-    }
-  }
-}
-
-function stopCamera(){
-  camScanActive=false;
-  if(camAnimId){cancelAnimationFrame(camAnimId);camAnimId=null}
-  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null}
-}
-
-function closeCamModal(){
-  stopCamera();
-  document.getElementById('cam-modal').classList.remove('open');
-  /* pendingMgmtはここでリセットしない — OCR処理後に参照するため */
-}
-
-function showFallback(msg){
-  document.getElementById('fallback-area').style.display='block';
-  if(msg)toast(msg,4000);
-}
-function showCamStatus(msg){
-  const el=document.getElementById('cam-status');
-  document.getElementById('cam-status-text').textContent=msg;
-  el.style.display='block';
-  clearTimeout(el._t);el._t=setTimeout(()=>el.style.display='none',2000);
-}
-
-/* ===== jsQR リアルタイムスキャン ===== */
-function startQRLoop(video){
-  camScanActive=true;
-  const canvas=document.createElement('canvas');
-  const ctx=canvas.getContext('2d',{willReadFrequently:true});
-
-  function loop(){
-    if(!camScanActive)return;
-    if(video.readyState===video.HAVE_ENOUGH_DATA&&video.videoWidth>0){
-      const vw=video.videoWidth,vh=video.videoHeight;
-      /* 中央50%の正方形領域のみ解析（高速化） */
-      const side=Math.min(vw,vh)*0.55;
-      const sx=(vw-side)/2,sy=(vh-side)/2;
-      const sz=Math.min(320,Math.round(side));
-      canvas.width=sz;canvas.height=sz;
-      ctx.drawImage(video,sx,sy,side,side,0,0,sz,sz);
-      const imgData=ctx.getImageData(0,0,sz,sz);
-      const result=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'dontInvert'});
-      if(result&&result.data){
-        camScanActive=false;
-        /* Canvas即破棄 */
-        canvas.width=1;canvas.height=1;
-        handleQRResult(result.data);
-        return;
-      }
-    }
-    camAnimId=requestAnimationFrame(loop);
-  }
-  camAnimId=requestAnimationFrame(loop);
-}
-
-/* ===== シャッターボタンによる静止画QR解析 ===== */
-function captureAndDecodeQR(){
-  const video=document.getElementById('cam-video');
-  if(!video.srcObject){showFallback('カメラが起動していません');return}
-  camScanActive=false;
-  const canvas=document.createElement('canvas');
-  canvas.width=video.videoWidth||640;
-  canvas.height=video.videoHeight||480;
-  const ctx=canvas.getContext('2d');
-  ctx.drawImage(video,0,0);
-  /* フル解像度でQR解析（静止画なので時間をかけてOK） */
-  const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
-  const result=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
-  /* Canvas即破棄 */
-  canvas.width=1;canvas.height=1;
-  if(result&&result.data){
-    handleQRResult(result.data);
-  }else{
-    toast('QRコードを検出できませんでした。再度試してください。');
-    /* 再スキャン開始 */
-    if(camStream)startQRLoop(document.getElementById('cam-video'));
-    /* フォールバックも表示 */
-    showFallback();
-  }
-}
-
-/* ===== QR結果処理 ===== */
-function handleQRResult(raw){
-  closeCamModal();
-  pendingMgmt=String(raw).trim();
-  const found=parts.find(p=>(p.mgmt||'')===pendingMgmt);
-  if(found){
-    showFoundPart(found);
-  }else{
-    if(confirm(`管理番号「${pendingMgmt}」は未登録です。\nラベルを撮影してOCR読み取りしますか？`)){
-      openOCRMode();
-    }else{
-      openAddModal({mgmt:pendingMgmt});
-    }
-  }
-}
-
-/* ===== OCRモードに切り替え ===== */
-async function openOCRMode(){
-  camMode='ocr';
-  document.getElementById('cam-title').textContent='ラベルを撮影（Part No. / Part Name）';
-  document.getElementById('qr-frame').style.display='none';
-  document.getElementById('ocr-frame').style.display='flex';
-  document.getElementById('cam-footer-qr').style.display='none';
-  document.getElementById('cam-footer-ocr').style.display='flex';
-  document.getElementById('cam-hint').textContent='Part No. と Part Name が枠内に収まるように';
-  document.getElementById('fallback-area').style.display='none';
-  document.getElementById('cam-modal').classList.add('open');
-  await startCamera();
-}
-
-function skipOCR(){
-  closeCamModal();
-  openAddModal({mgmt:pendingMgmt});
-}
-
-/* ===== OCR撮影・解析 ===== */
-async function captureOCR(){
-  const video=document.getElementById('cam-video');
-  const vw=video.videoWidth||640,vh=video.videoHeight||480;
-  /* OCR枠（88%幅×190px相当）を切り出す */
-  const frameW=vw*0.88,frameH=Math.round(frameW*(190/420));
-  const sx=(vw-frameW)/2,sy=(vh-frameH)/2;
-  const canvas=document.createElement('canvas');
-  canvas.width=Math.round(frameW);canvas.height=Math.round(frameH);
-  canvas.getContext('2d').drawImage(video,sx,sy,frameW,frameH,0,0,canvas.width,canvas.height);
-  closeCamModal();
-  showLoading('ラベルを読み取り中...');
-
-  /* Step1: まずQR解析を試みる */
-  const ctx=canvas.getContext('2d');
-  const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
-  const qrResult=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
-  if(qrResult&&qrResult.data){
-    canvas.width=1;canvas.height=1;
-    hideLoading();
-    handleQRResult(qrResult.data);
-    return;
-  }
-
-  /* Step2: QR失敗 → 画像をbase64に変換してClaude APIで直接読み取り */
-  try{
-    const base64=canvas.toDataURL('image/jpeg',0.85).split(',')[1];
-    /* Canvas即破棄（メモリ解放） */
-    canvas.width=1;canvas.height=1;
-    ctx.clearRect(0,0,1,1);
-    showLoading('AIで読み取り中...');
-    const parsed=await readLabelWithAI(base64);
-    parsed.mgmt=pendingMgmt||'';
-    parsed._ocrDone=true;
-    hideLoading();
-    openAddModal(parsed);
-  }catch(e){
-    canvas.width=1;canvas.height=1;
-    hideLoading();
-    toast('読み取りに失敗しました。手入力してください。');
-    openAddModal({mgmt:pendingMgmt||''});
-  }
-}
-
-/* ===== フォールバック: ファイル選択から解析 ===== */
-function handleFallbackFile(e){
-  const file=e.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    const img=new Image();
-    img.onload=()=>{
-      const canvas=document.createElement('canvas');
-      canvas.width=img.width;canvas.height=img.height;
-      const ctx=canvas.getContext('2d');
-      ctx.drawImage(img,0,0);
-      const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
-      /* まずQR解析 */
-      const qrResult=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
-      if(qrResult&&qrResult.data){
-        canvas.width=1;canvas.height=1;
-        closeCamModal();
-        handleQRResult(qrResult.data);
-        return;
-      }
-      /* QR失敗→OCR */
-      closeCamModal();
-      showLoading('ラベルを読み取り中...');
-      const base64=canvas.toDataURL('image/jpeg',0.85).split(',')[1];
-      canvas.width=1;canvas.height=1;
-      showLoading('AIで読み取り中...');
-      readLabelWithAI(base64).then(parsed=>{
-        parsed.mgmt=pendingMgmt||'';
-        parsed._ocrDone=true;
-        hideLoading();
-        openAddModal(parsed);
-      }).catch(()=>{
-        hideLoading();
-        toast('読み取りに失敗しました。手入力してください。');
-        openAddModal({mgmt:pendingMgmt||''});
-      });
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(file);
-  e.target.value='';
-}
-
-/* ===== OCRテキスト解析 ===== */
-/* ===== Claude APIで画像を直接読み取り ===== */
-async function readLabelWithAI(base64jpeg){
-  try{
-    const response=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:200,
-        messages:[{
-          role:'user',
-          content:[
-            {
-              type:'image',
-              source:{type:'base64',media_type:'image/jpeg',data:base64jpeg}
-            },
-            {
-              type:'text',
-              text:`この部品ラベル画像を読み取ってください。
-ラベルには「Part No.」（部品番号）と「Part Name」（部品名）が手書きで記載されています。
-手書き文字を正確に読み取り、必ず以下の形式のみで返答してください（余分な説明不要）:
-Part No.
-[部品番号]
-Part Name
-[部品名]`
-            }
-          ]
-        }]
-      })
-    });
-    if(!response.ok){
-      const err=await response.json().catch(()=>({}));
-      throw new Error(err.error?.message||response.status);
-    }
-    const data=await response.json();
-    const text=data.content&&data.content[0]&&data.content[0].text||'';
-    return parseOCRText(text);
-  }catch(e){
-    console.error('Claude API error:',e);
-    /* API失敗時は空のオブジェクトを返す（手入力へ誘導） */
-    return{code:'',name:'',_apiError:String(e)};
-  }
-}
-
-function parseOCRText(text){
-  /* ラベル形式:
-     Part No.      → 次行に部品番号
-     1234567
-     Part Name     → 次行に部品名
-     HDD, 1TB
-     左下: 00003   → 管理番号（QRで取得済みのため通常不要）
-  */
-  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
-  let code='',name='';
-
-  for(let i=0;i<lines.length;i++){
-    const l=lines[i];
-
-    /* Part No. 検出パターン:
-       - "Part No." / "Part No" / "PartNo" / OCR誤認 "Part Ne." など
-       - 同じ行に値が含まれる場合も対応: "Part No. 1234567"
-    */
-    if(/part[\s\.]*(no|ne|n0|n\.o)[\s\.]*/i.test(l)){
-      /* 同行に値があるか確認 */
-      const inlineM=l.replace(/part[\s\.]*(no|ne|n0|n\.o)[\s\.]*/i,'').trim();
-      if(inlineM.length>=3){
-        const m=inlineM.match(/([A-Z0-9][A-Z0-9\-\/]{2,})/i);
-        if(m)code=m[1].toUpperCase();
-      }
-      /* 次行から取得 */
-      if(!code){
-        for(let j=i+1;j<=i+2&&j<lines.length;j++){
-          const next=lines[j].trim();
-          if(!next||/part/i.test(next))continue;
-          const m=next.match(/([A-Z0-9][A-Z0-9\-\/]{2,})/i);
-          if(m){code=m[1].toUpperCase();break}
-        }
-      }
-    }
-
-    /* Part Name 検出パターン:
-       - "Part Name" / "PartName" / OCR誤認 "Part Neme" など
-       - 同じ行に値が含まれる場合も対応
-    */
-    if(/part[\s\.]*(name|neme|naме|nam[e3])/i.test(l)){
-      const inlineName=l.replace(/part[\s\.]*(name|neme|naме|nam[e3])/i,'').trim();
-      if(inlineName.length>=2&&!/part/i.test(inlineName)){
-        name=inlineName;
-      }
-      if(!name){
-        for(let j=i+1;j<=i+2&&j<lines.length;j++){
-          const next=lines[j].trim();
-          if(!next||/part/i.test(next))continue;
-          name=next;break;
-        }
-      }
-    }
-  }
-
-  /* フォールバック1: 6桁以上の数字列をPart Noとして使用 */
-  if(!code){
-    for(const l of lines){
-      const m=l.match(/\b(\d{6,})\b/);
-      if(m){code=m[1];break}
-    }
-  }
-
-  /* フォールバック2: 英数字混じりの長い文字列をPart Noとして使用 */
-  if(!code){
-    for(const l of lines){
-      const m=l.match(/\b([A-Z0-9]{2}[A-Z0-9\-]{4,})\b/i);
-      if(m&&!/part|name/i.test(m[1])){code=m[1].toUpperCase();break}
-    }
-  }
-
-  return{code,name};
-}
-
-/* ===== 再スキャン ===== */
-function rescanOCR(){
-  /* 現在の入力値（管理番号など）を保持してOCRモードを再起動 */
-  const mgmt=document.getElementById('f-mgmt').value.trim();
-  pendingMgmt=mgmt||pendingMgmt||'';
-  closeModal();
-  openOCRMode();
-}
-function rescanQR(){
-  /* QRスキャンをやり直す */
-  closeModal();
-  openCamModal();
-}
-
-/* ===== 登録済み部品表示 ===== */
-function showFoundPart(p){
-  foundPartId=p.id;
-  const st=getStatus(p);
-  const badge=st==='zero'?'<span class="badge zero">在庫切れ</span>':st==='low'?'<span class="badge low">少量</span>':'<span class="badge ok">あり</span>';
-  document.getElementById('found-card').innerHTML=`
-    <div class="pi-label">管理番号</div><div class="pi-value">${esc(p.mgmt||'—')}</div>
-    <div class="pi-label">部品番号</div><div class="pi-value">${esc(p.code||'—')}</div>
-    <div class="pi-label">部品名</div><div class="pi-value">${esc(p.name)}</div>
-    <div class="pi-label">保管場所</div><div class="pi-value">${esc(p.loc||'—')}</div>
-    ${p.note?`<div class="pi-label">特記事項</div><div class="pi-value" style="font-size:13px">${esc(p.note)}</div>`:''}
-    <div class="pi-label" style="margin-top:8px">現在の在庫</div>
-    <div class="pi-qty">${p.qty}点 ${badge}</div>`;
-  document.getElementById('found-modal').classList.add('open');
-}
-function closeFoundModal(){document.getElementById('found-modal').classList.remove('open');foundPartId=null}
-function openQuickOut(){
-  const p=parts.find(x=>x.id===foundPartId);if(!p)return;
-  document.getElementById('found-modal').classList.remove('open');
-  document.getElementById('quickout-info').textContent=`${p.name}（現在: ${p.qty}点）`;
-  document.getElementById('quickout-qty').value=1;
-  document.getElementById('quickout-person').value='';
-  document.getElementById('quickout-memo').value='';
-  document.getElementById('quickout-modal').classList.add('open');
-}
-function closeQuickOut(){document.getElementById('quickout-modal').classList.remove('open')}
-function chgQuickOutQty(d){const el=document.getElementById('quickout-qty');el.value=Math.max(1,(parseInt(el.value)||1)+d)}
-function confirmQuickOut(){
-  const p=parts.find(x=>x.id===foundPartId);if(!p)return;
-  const qty=parseInt(document.getElementById('quickout-qty').value)||1;
-  const person=document.getElementById('quickout-person').value.trim();
-  const memo=document.getElementById('quickout-memo').value.trim();
-  if(p.qty<qty){alert(`在庫不足です（現在: ${p.qty}点）`);return}
-  const before=p.qty;p.qty-=qty;
-  history.unshift({id:uid(),partId:p.id,partCode:p.code,partName:p.name,partMgmt:p.mgmt,type:'out',qty,before,after:p.qty,memo,person,ts:new Date().toISOString()});
-  save();closeQuickOut();renderParts();foundPartId=null;
-  toast(`出庫完了: ${p.name} −${qty}点`);
-}
-
-/* ===== INOUT ===== */
+/* ===== 入出庫 ===== */
 function renderInoutList(){
   const q=(document.getElementById('inout-search').value||'').toLowerCase();
   const locF=document.getElementById('inout-loc-filter').value;
@@ -1231,7 +808,7 @@ function clearInoutSelection(){
     cb.checked=false;document.getElementById('sr-'+cb.id.replace('cb-',''))?.classList.remove('selected');
   });updateSelCount();
 }
-function executeInout(){
+async function executeInout(){
   const type=document.getElementById('inout-type').value;
   const memo=document.getElementById('inout-memo').value.trim();
   const person=document.getElementById('inout-person').value.trim();
@@ -1240,16 +817,26 @@ function executeInout(){
   if(!sel.length){toast('部品を選択してください');return}
   const errs=sel.filter(({p,qty})=>type==='out'&&p.qty<qty).map(({p})=>`${p.name}: 在庫不足`);
   if(errs.length){alert('在庫不足:\n'+errs.join('\n'));return}
-  const ts=new Date().toISOString();
-  sel.forEach(({p,qty})=>{
-    const before=p.qty;p.qty=type==='in'?p.qty+qty:p.qty-qty;
-    history.unshift({id:uid(),partId:p.id,partCode:p.code,partName:p.name,partMgmt:p.mgmt,type,qty,before,after:p.qty,memo,person,ts});
-  });
-  save();clearInoutSelection();document.getElementById('inout-memo').value='';renderInoutList();
-  toast(`${sel.length}件の${type==='in'?'入庫':'出庫'}を登録しました`);
+  showLoading('登録中...');
+  try{
+    const ts=new Date().toISOString();
+    for(const {p,qty} of sel){
+      const before=p.qty;p.qty=type==='in'?p.qty+qty:p.qty-qty;
+      await gasPost('savePart',{data:p});
+      const h={id:uid(),partId:p.id,partCode:p.code,partName:p.name,partMgmt:p.mgmt,type,qty,before,after:p.qty,memo,person,ts};
+      history.unshift(h);
+      await gasPost('saveHistory',{data:h});
+    }
+    setSyncBadge('ok','同期済み');
+    clearInoutSelection();document.getElementById('inout-memo').value='';renderInoutList();
+    toast(`${sel.length}件の${type==='in'?'入庫':'出庫'}を登録しました`);
+  }catch(e){
+    setSyncBadge('error','同期エラー');
+    toast('登録に失敗しました: '+e.message);
+  }finally{hideLoading()}
 }
 
-/* ===== SIMPLE MODE ===== */
+/* ===== シンプルモード ===== */
 function handleQuickEnter(e){
   if(e.key!=='Enter')return;
   const q=document.getElementById('quick-input').value.trim();if(!q)return;
@@ -1276,16 +863,26 @@ function clearQuick(){
   document.getElementById('quick-input').focus();
 }
 function chgSimpleQty(d){const el=document.getElementById('simple-qty');el.value=Math.max(1,(parseInt(el.value)||1)+d)}
-function doSimpleInout(type){
+async function doSimpleInout(type){
   const p=parts.find(x=>x.id===simpleFoundId);if(!p)return;
   const qty=parseInt(document.getElementById('simple-qty').value)||1;
   const person=document.getElementById('simple-person').value.trim();
   const memo=document.getElementById('simple-memo').value.trim();
   if(type==='out'&&p.qty<qty){toast(`在庫不足です（現在: ${p.qty}点）`);return}
-  const before=p.qty;p.qty=type==='in'?p.qty+qty:p.qty-qty;
-  history.unshift({id:uid(),partId:p.id,partCode:p.code,partName:p.name,partMgmt:p.mgmt,type,qty,before,after:p.qty,memo,person,ts:new Date().toISOString()});
-  save();toast(`${p.name} / ${type==='in'?'入庫+':'出庫−'}${qty}点 / 残: ${p.qty}点`,3000);
-  clearQuick();renderSimpleRecent();
+  showLoading('登録中...');
+  try{
+    const before=p.qty;p.qty=type==='in'?p.qty+qty:p.qty-qty;
+    await gasPost('savePart',{data:p});
+    const h={id:uid(),partId:p.id,partCode:p.code,partName:p.name,partMgmt:p.mgmt,type,qty,before,after:p.qty,memo,person,ts:new Date().toISOString()};
+    history.unshift(h);
+    await gasPost('saveHistory',{data:h});
+    setSyncBadge('ok','同期済み');
+    toast(`${p.name} / ${type==='in'?'入庫+':'出庫−'}${qty}点 / 残: ${p.qty}点`,3000);
+    clearQuick();renderSimpleRecent();
+  }catch(e){
+    setSyncBadge('error','同期エラー');
+    toast('登録に失敗しました: '+e.message);
+  }finally{hideLoading()}
 }
 function renderSimpleRecent(){
   const el=document.getElementById('simple-recent');
@@ -1303,7 +900,7 @@ function renderSimpleRecent(){
     }).join('')+'</div>';
 }
 
-/* ===== HISTORY ===== */
+/* ===== 履歴 ===== */
 function renderHistory(){
   const f=document.getElementById('hist-filter').value;
   const person=(document.getElementById('hist-person').value||'').toLowerCase();
@@ -1327,13 +924,15 @@ function renderHistory(){
     </div>`;
   }).join('');
 }
-function clearHistory(){if(!confirm('履歴をすべて削除しますか？'))return;history=[];save();renderHistory();toast('履歴を削除しました')}
+function clearHistory(){if(!confirm('履歴をすべて削除しますか？'))return;history=[];renderHistory();toast('履歴を削除しました（ローカルのみ）')}
 
-/* ===== SETTINGS ===== */
-function saveGlobalThreshold(){
+/* ===== 設定 ===== */
+async function saveGlobalThreshold(){
   const v=parseInt(document.getElementById('global-threshold').value);
   if(isNaN(v)||v<1){alert('1以上の数値を入力してください');return}
-  cfg.threshold=v;save();renderMinStock();renderParts();toast(`グローバル閾値を${v}点に設定しました`);
+  cfg.threshold=v;
+  await gasPost('saveConfig',{data:cfg});
+  renderMinStock();renderParts();toast(`グローバル閾値を${v}点に設定しました`);
 }
 function renderMinStock(){
   const tbody=document.getElementById('min-stock-tbody');const empty=document.getElementById('min-stock-empty');
@@ -1348,14 +947,248 @@ function renderMinStock(){
     <td><button class="btn small" onclick="saveMinStock('${p.id}')">保存</button></td>
   </tr>`).join('');
 }
-function saveMinStock(id){
+async function saveMinStock(id){
   const p=parts.find(x=>x.id===id);if(!p)return;
   const raw=document.getElementById('ms-'+id).value;
   p.minStock=raw===''?null:Math.max(0,parseInt(raw)||0);
-  save();renderParts();toast(`${p.name}の最小在庫数を設定しました`);
+  await gasPost('savePart',{data:p});
+  renderParts();toast(`${p.name}の最小在庫数を設定しました`);
 }
 
-/* ===== CSV IMPORT ===== */
+/* ===== カメラ・QR ===== */
+async function openCamModal(){
+  camMode='qr';
+  document.getElementById('cam-title').textContent='QRコードをスキャン';
+  document.getElementById('qr-frame').style.display='flex';
+  document.getElementById('ocr-frame').style.display='none';
+  document.getElementById('cam-footer-qr').style.display='flex';
+  document.getElementById('cam-footer-ocr').style.display='none';
+  document.getElementById('cam-hint').textContent='QRコードを枠内に合わせてください';
+  document.getElementById('fallback-area').style.display='none';
+  document.getElementById('cam-modal').classList.add('open');
+  await startCamera();
+}
+async function startCamera(){
+  stopCamera();
+  const video=document.getElementById('cam-video');
+  try{
+    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{exact:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
+    video.srcObject=camStream;await video.play();
+    if(camMode==='qr')startQRLoop(video);
+  }catch(e1){
+    try{
+      camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false});
+      video.srcObject=camStream;await video.play();
+      if(camMode==='qr')startQRLoop(video);
+    }catch(e2){
+      document.getElementById('fallback-area').style.display='block';
+      toast('カメラを起動できませんでした',3000);
+    }
+  }
+}
+function stopCamera(){
+  camScanActive=false;
+  if(camAnimId){cancelAnimationFrame(camAnimId);camAnimId=null}
+  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null}
+}
+function closeCamModal(){
+  stopCamera();
+  document.getElementById('cam-modal').classList.remove('open');
+}
+function startQRLoop(video){
+  camScanActive=true;
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d',{willReadFrequently:true});
+  function loop(){
+    if(!camScanActive)return;
+    if(video.readyState===video.HAVE_ENOUGH_DATA&&video.videoWidth>0){
+      const vw=video.videoWidth,vh=video.videoHeight;
+      const side=Math.min(vw,vh)*0.55;
+      const sx=(vw-side)/2,sy=(vh-side)/2;
+      const sz=Math.min(320,Math.round(side));
+      canvas.width=sz;canvas.height=sz;
+      ctx.drawImage(video,sx,sy,side,side,0,0,sz,sz);
+      const imgData=ctx.getImageData(0,0,sz,sz);
+      const result=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'dontInvert'});
+      if(result&&result.data){
+        camScanActive=false;
+        canvas.width=1;canvas.height=1;
+        handleQRResult(result.data);return;
+      }
+    }
+    camAnimId=requestAnimationFrame(loop);
+  }
+  camAnimId=requestAnimationFrame(loop);
+}
+function captureAndDecodeQR(){
+  const video=document.getElementById('cam-video');
+  if(!video.srcObject){document.getElementById('fallback-area').style.display='block';return}
+  camScanActive=false;
+  const canvas=document.createElement('canvas');
+  canvas.width=video.videoWidth||640;canvas.height=video.videoHeight||480;
+  canvas.getContext('2d').drawImage(video,0,0);
+  const imgData=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
+  const result=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
+  canvas.width=1;canvas.height=1;
+  if(result&&result.data){handleQRResult(result.data)}
+  else{toast('QRコードを検出できませんでした');if(camStream)startQRLoop(video);document.getElementById('fallback-area').style.display='block'}
+}
+function handleQRResult(raw){
+  closeCamModal();
+  pendingMgmt=String(raw).trim();
+  const found=parts.find(p=>(p.mgmt||'')===pendingMgmt);
+  if(found){showFoundPart(found)}
+  else{
+    if(confirm(`管理番号「${pendingMgmt}」は未登録です。\nラベルを撮影してAI読み取りしますか？`)){openOCRMode()}
+    else{openAddModal({mgmt:pendingMgmt})}
+  }
+}
+async function openOCRMode(){
+  camMode='ocr';
+  document.getElementById('cam-title').textContent='ラベルを撮影（Part No. / Part Name）';
+  document.getElementById('qr-frame').style.display='none';
+  document.getElementById('ocr-frame').style.display='flex';
+  document.getElementById('cam-footer-qr').style.display='none';
+  document.getElementById('cam-footer-ocr').style.display='flex';
+  document.getElementById('cam-hint').textContent='Part No. と Part Name が枠内に収まるように';
+  document.getElementById('fallback-area').style.display='none';
+  document.getElementById('cam-modal').classList.add('open');
+  await startCamera();
+}
+function skipOCR(){closeCamModal();openAddModal({mgmt:pendingMgmt})}
+async function captureOCR(){
+  const video=document.getElementById('cam-video');
+  const vw=video.videoWidth||640,vh=video.videoHeight||480;
+  const frameW=vw*0.88,frameH=Math.round(frameW*(190/420));
+  const sx=(vw-frameW)/2,sy=(vh-frameH)/2;
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.round(frameW);canvas.height=Math.round(frameH);
+  canvas.getContext('2d').drawImage(video,sx,sy,frameW,frameH,0,0,canvas.width,canvas.height);
+  /* QR解析を先に試みる */
+  const ctx=canvas.getContext('2d');
+  const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
+  const qrResult=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
+  if(qrResult&&qrResult.data){canvas.width=1;canvas.height=1;closeCamModal();handleQRResult(qrResult.data);return}
+  /* GAS経由でGemini OCR */
+  const base64=canvas.toDataURL('image/jpeg',0.85).split(',')[1];
+  canvas.width=1;canvas.height=1;
+  closeCamModal();
+  showLoading('AIで読み取り中...');
+  try{
+    const result=await gasPost('ocr',{base64,mimeType:'image/jpeg'});
+    hideLoading();
+    const parsed=parseOCRText(result.text||'');
+    parsed.mgmt=pendingMgmt||'';
+    parsed._ocrDone=true;
+    openAddModal(parsed);
+  }catch(e){
+    hideLoading();
+    toast('AI読み取りに失敗しました。手入力してください。');
+    openAddModal({mgmt:pendingMgmt||'',_ocrDone:true,_apiError:true});
+  }
+}
+async function handleFallbackFile(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async ev=>{
+    const img=new Image();
+    img.onload=async()=>{
+      const canvas=document.createElement('canvas');
+      canvas.width=img.width;canvas.height=img.height;
+      canvas.getContext('2d').drawImage(img,0,0);
+      const imgData=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
+      const qrResult=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
+      if(qrResult&&qrResult.data){canvas.width=1;canvas.height=1;closeCamModal();handleQRResult(qrResult.data);return}
+      const base64=canvas.toDataURL('image/jpeg',0.85).split(',')[1];
+      canvas.width=1;canvas.height=1;
+      closeCamModal();showLoading('AIで読み取り中...');
+      try{
+        const result=await gasPost('ocr',{base64,mimeType:'image/jpeg'});
+        hideLoading();
+        const parsed=parseOCRText(result.text||'');
+        parsed.mgmt=pendingMgmt||'';parsed._ocrDone=true;
+        openAddModal(parsed);
+      }catch(err){
+        hideLoading();toast('読み取りに失敗しました。手入力してください。');
+        openAddModal({mgmt:pendingMgmt||''});
+      }
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);e.target.value='';
+}
+function parseOCRText(text){
+  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
+  let code='',name='';
+  for(let i=0;i<lines.length;i++){
+    const l=lines[i];
+    if(/part[\s.]*(no|ne|n0)[\s.]*/i.test(l)){
+      const inline=l.replace(/part[\s.]*(no|ne|n0)[\s.]*/i,'').trim();
+      if(inline.length>=3){const m=inline.match(/([A-Z0-9][A-Z0-9\-\/]{2,})/i);if(m)code=m[1].toUpperCase()}
+      if(!code){for(let j=i+1;j<=i+2&&j<lines.length;j++){const next=lines[j].trim();if(!next||/part/i.test(next))continue;const m=next.match(/([A-Z0-9][A-Z0-9\-\/]{2,})/i);if(m){code=m[1].toUpperCase();break}}}
+    }
+    if(/part[\s.]*(name|neme|nam[e3])/i.test(l)){
+      const inline=l.replace(/part[\s.]*(name|neme|nam[e3])/i,'').trim();
+      if(inline.length>=2&&!/part/i.test(inline))name=inline;
+      if(!name){for(let j=i+1;j<=i+2&&j<lines.length;j++){const next=lines[j].trim();if(!next||/part/i.test(next))continue;name=next;break}}
+    }
+  }
+  if(!code){for(const l of lines){const m=l.match(/\b(\d{6,})\b/);if(m){code=m[1];break}}}
+  return{code,name};
+}
+function rescanOCR(){const mgmt=document.getElementById('f-mgmt').value.trim();pendingMgmt=mgmt||pendingMgmt||'';closeModal();openOCRMode()}
+function rescanQR(){closeModal();openCamModal()}
+
+/* ===== 登録済み部品表示 ===== */
+function showFoundPart(p){
+  foundPartId=p.id;
+  const st=getStatus(p);
+  const badge=st==='zero'?'<span class="badge zero">在庫切れ</span>':st==='low'?'<span class="badge low">少量</span>':'<span class="badge ok">あり</span>';
+  document.getElementById('found-card').innerHTML=`
+    <div class="pi-label">管理番号</div><div class="pi-value">${esc(p.mgmt||'—')}</div>
+    <div class="pi-label">部品番号</div><div class="pi-value">${esc(p.code||'—')}</div>
+    <div class="pi-label">部品名</div><div class="pi-value">${esc(p.name)}</div>
+    <div class="pi-label">保管場所</div><div class="pi-value">${esc(p.loc||'—')}</div>
+    ${p.note?`<div class="pi-label">特記事項</div><div class="pi-value" style="font-size:13px">${esc(p.note)}</div>`:''}
+    <div class="pi-label" style="margin-top:8px">現在の在庫</div>
+    <div class="pi-qty">${p.qty}点 ${badge}</div>`;
+  document.getElementById('found-modal').classList.add('open');
+}
+function closeFoundModal(){document.getElementById('found-modal').classList.remove('open');foundPartId=null}
+function openQuickOut(){
+  const p=parts.find(x=>x.id===foundPartId);if(!p)return;
+  document.getElementById('found-modal').classList.remove('open');
+  document.getElementById('quickout-info').textContent=`${p.name}（現在: ${p.qty}点）`;
+  document.getElementById('quickout-qty').value=1;
+  document.getElementById('quickout-person').value='';
+  document.getElementById('quickout-memo').value='';
+  document.getElementById('quickout-modal').classList.add('open');
+}
+function closeQuickOut(){document.getElementById('quickout-modal').classList.remove('open')}
+function chgQuickOutQty(d){const el=document.getElementById('quickout-qty');el.value=Math.max(1,(parseInt(el.value)||1)+d)}
+async function confirmQuickOut(){
+  const p=parts.find(x=>x.id===foundPartId);if(!p)return;
+  const qty=parseInt(document.getElementById('quickout-qty').value)||1;
+  const person=document.getElementById('quickout-person').value.trim();
+  const memo=document.getElementById('quickout-memo').value.trim();
+  if(p.qty<qty){alert(`在庫不足です（現在: ${p.qty}点）`);return}
+  showLoading('登録中...');
+  try{
+    const before=p.qty;p.qty-=qty;
+    await gasPost('savePart',{data:p});
+    const h={id:uid(),partId:p.id,partCode:p.code,partName:p.name,partMgmt:p.mgmt,type:'out',qty,before,after:p.qty,memo,person,ts:new Date().toISOString()};
+    history.unshift(h);
+    await gasPost('saveHistory',{data:h});
+    setSyncBadge('ok','同期済み');
+    closeQuickOut();renderParts();foundPartId=null;
+    toast(`出庫完了: ${p.name} −${qty}点`);
+  }catch(e){
+    setSyncBadge('error','同期エラー');
+    toast('登録に失敗しました: '+e.message);
+  }finally{hideLoading()}
+}
+
+/* ===== CSVインポート ===== */
 function parseCSVLine(line){
   const res=[];let cur='';let inQ=false;
   for(let i=0;i<line.length;i++){
@@ -1384,20 +1217,27 @@ function previewCSV(e){
   };
   r.readAsText(file,'UTF-8');
 }
-function importCSV(){
+async function importCSV(){
+  showLoading('インポート中...');
   let added=0,skipped=0;
-  csvRows.forEach(r=>{
-    const[mgmt='',code='',name='',qtyRaw='',loc='',note='']=r;
-    if(!name){skipped++;return}
-    if(parts.some(p=>(code&&(p.code||'')===code)||(mgmt&&(p.mgmt||'')===mgmt))){skipped++;return}
-    const qty=parseInt(qtyRaw)||0;
-    const np={id:uid(),mgmt,code,name,qty,loc,note,minStock:null,createdAt:new Date().toISOString()};
-    parts.push(np);
-    if(qty>0)history.unshift({id:uid(),partId:np.id,partCode:code,partName:name,partMgmt:mgmt,type:'in',qty,before:0,after:qty,memo:'CSVインポート',person:'',ts:new Date().toISOString()});
-    added++;
-  });
-  save();updateLocFilter();renderParts();cancelCSV();
-  toast(`${added}件を登録しました${skipped?`（${skipped}件スキップ）`:''}`);
+  try{
+    for(const r of csvRows){
+      const[mgmt='',code='',name='',qtyRaw='',loc='',note='']=r;
+      if(!name){skipped++;continue}
+      if(parts.some(p=>(code&&(p.code||'')===code)||(mgmt&&(p.mgmt||'')===mgmt))){skipped++;continue}
+      const qty=parseInt(qtyRaw)||0;
+      const np={id:uid(),mgmt,code,name,qty,loc,note,minStock:null,createdAt:new Date().toISOString()};
+      parts.push(np);
+      await gasPost('savePart',{data:np});
+      added++;
+    }
+    setSyncBadge('ok','同期済み');
+    updateLocFilter();renderParts();cancelCSV();
+    toast(`${added}件を登録しました${skipped?`（${skipped}件スキップ）`:''}`);
+  }catch(e){
+    setSyncBadge('error','同期エラー');
+    toast('インポートに失敗しました: '+e.message);
+  }finally{hideLoading()}
 }
 function cancelCSV(){
   csvRows=[];document.getElementById('csv-preview-area').innerHTML='';
@@ -1405,32 +1245,21 @@ function cancelCSV(){
   document.getElementById('csv-file').value='';
 }
 
-/* ===== BACKUP ===== */
+/* ===== バックアップ ===== */
 function exportCSV(){
   const h='管理番号,部品番号,部品名,点数,最小在庫数,保管場所,特記事項\n';
   const rows=parts.map(p=>[p.mgmt||'',p.code||'',p.name,p.qty,p.minStock!=null?p.minStock:'',p.loc||'',p.note||'']
     .map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
   dl('parts_'+dateStr()+'.csv','text/csv;charset=utf-8','\uFEFF'+h+rows);
-  cfg.lastBackupAt=new Date().toISOString();save();checkBackupRemind();toast('CSVをダウンロードしました');
+  cfg.lastBackupAt=new Date().toISOString();
+  gasPost('saveConfig',{data:cfg}).then(()=>checkBackupRemind());
+  toast('CSVをダウンロードしました');
 }
 function exportJSON(){
-  dl('parts_'+dateStr()+'.json','application/json',JSON.stringify({parts,history,cfg,trash,exportedAt:new Date().toISOString()},null,2));
-  cfg.lastBackupAt=new Date().toISOString();save();checkBackupRemind();toast('JSONをダウンロードしました');
-}
-function importJSON(e){
-  const file=e.target.files[0];if(!file)return;
-  if(!confirm('現在のデータをJSONで上書きします。よろしいですか？'))return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    try{
-      const data=JSON.parse(ev.target.result);
-      if(!Array.isArray(data.parts))throw new Error('形式が不正です');
-      parts=data.parts;history=data.history||[];trash=data.trash||[];
-      if(data.cfg)cfg=Object.assign({threshold:3,backupRemindDays:7},data.cfg);
-      save();updateLocFilter();renderParts();checkBackupRemind();toast('インポートが完了しました');
-    }catch(err){alert('インポートに失敗しました: '+err.message)}
-  };
-  r.readAsText(file);e.target.value='';
+  dl('parts_'+dateStr()+'.json','application/json',JSON.stringify({parts,history,cfg,exportedAt:new Date().toISOString()},null,2));
+  cfg.lastBackupAt=new Date().toISOString();
+  gasPost('saveConfig',{data:cfg}).then(()=>checkBackupRemind());
+  toast('JSONをダウンロードしました');
 }
 function dl(name,type,content){
   const a=document.createElement('a');
@@ -1438,7 +1267,6 @@ function dl(name,type,content){
   a.download=name;a.click();URL.revokeObjectURL(a.href);
 }
 
-/* ===== KEYBOARD ===== */
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     ['part-modal','del-modal','found-modal','quickout-modal'].forEach(id=>document.getElementById(id).classList.remove('open'));
@@ -1446,8 +1274,7 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-/* ===== INIT ===== */
-load();updateLocFilter();renderParts();checkBackupRemind();
+initLoad();
 </script>
 </body>
 </html>
