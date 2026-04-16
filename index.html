@@ -666,7 +666,16 @@ function openAddModal(pre){
       const el=document.getElementById('f-'+k);
       if(el&&pre[k]!=null)el.value=pre[k];
     });
-    if(pre._ocrDone)document.getElementById('ocr-status').style.display='block';
+    if(pre._ocrDone){
+      const st=document.getElementById('ocr-status');
+      st.style.display='block';
+      /* OCR生テキストをデバッグ表示 */
+      if(pre._rawOCR){
+        st.innerHTML='OCR読み取り完了 — 内容を確認して不足分を補完してください'
+          +'<details style="margin-top:6px"><summary style="cursor:pointer;font-size:11px;color:#0F6E56">OCR生テキスト（確認用）</summary>'
+          +'<pre style="font-size:10px;white-space:pre-wrap;margin-top:4px;background:#d9f7ee;padding:6px;border-radius:4px">'+pre._rawOCR.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</pre></details>';
+      }
+    }
   }
   updateLocFilter();
   document.getElementById('part-modal').classList.add('open');
@@ -953,6 +962,7 @@ async function captureOCR(){
     const parsed=parseOCRText(text);
     parsed.mgmt=pendingMgmt||'';
     parsed._ocrDone=true;
+    parsed._rawOCR=text; /* デバッグ用: 生テキストを保持 */
     openAddModal(parsed);
   }catch(e){
     canvas.width=1;canvas.height=1;
@@ -1010,26 +1020,76 @@ function handleFallbackFile(e){
 
 /* ===== OCRテキスト解析 ===== */
 function parseOCRText(text){
+  /* ラベル形式:
+     Part No.      → 次行に部品番号
+     1234567
+     Part Name     → 次行に部品名
+     HDD, 1TB
+     左下: 00003   → 管理番号（QRで取得済みのため通常不要）
+  */
   const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
   let code='',name='';
+
   for(let i=0;i<lines.length;i++){
     const l=lines[i];
-    if(/part\s*no\.?/i.test(l)){
-      const next=(lines[i+1]||'').trim();
-      const m=next.match(/([A-Z0-9][A-Z0-9\-\/]{3,})/i);
-      if(m)code=m[1].toUpperCase();
+
+    /* Part No. 検出パターン:
+       - "Part No." / "Part No" / "PartNo" / OCR誤認 "Part Ne." など
+       - 同じ行に値が含まれる場合も対応: "Part No. 1234567"
+    */
+    if(/part[\s\.]*(no|ne|n0|n\.o)[\s\.]*/i.test(l)){
+      /* 同行に値があるか確認 */
+      const inlineM=l.replace(/part[\s\.]*(no|ne|n0|n\.o)[\s\.]*/i,'').trim();
+      if(inlineM.length>=3){
+        const m=inlineM.match(/([A-Z0-9][A-Z0-9\-\/]{2,})/i);
+        if(m)code=m[1].toUpperCase();
+      }
+      /* 次行から取得 */
+      if(!code){
+        for(let j=i+1;j<=i+2&&j<lines.length;j++){
+          const next=lines[j].trim();
+          if(!next||/part/i.test(next))continue;
+          const m=next.match(/([A-Z0-9][A-Z0-9\-\/]{2,})/i);
+          if(m){code=m[1].toUpperCase();break}
+        }
+      }
     }
-    if(/part\s*name\.?/i.test(l)){
-      const next=(lines[i+1]||'').trim();
-      if(next&&!/part/i.test(next))name=next;
+
+    /* Part Name 検出パターン:
+       - "Part Name" / "PartName" / OCR誤認 "Part Neme" など
+       - 同じ行に値が含まれる場合も対応
+    */
+    if(/part[\s\.]*(name|neme|naме|nam[e3])/i.test(l)){
+      const inlineName=l.replace(/part[\s\.]*(name|neme|naме|nam[e3])/i,'').trim();
+      if(inlineName.length>=2&&!/part/i.test(inlineName)){
+        name=inlineName;
+      }
+      if(!name){
+        for(let j=i+1;j<=i+2&&j<lines.length;j++){
+          const next=lines[j].trim();
+          if(!next||/part/i.test(next))continue;
+          name=next;break;
+        }
+      }
     }
   }
+
+  /* フォールバック1: 6桁以上の数字列をPart Noとして使用 */
   if(!code){
     for(const l of lines){
       const m=l.match(/\b(\d{6,})\b/);
       if(m){code=m[1];break}
     }
   }
+
+  /* フォールバック2: 英数字混じりの長い文字列をPart Noとして使用 */
+  if(!code){
+    for(const l of lines){
+      const m=l.match(/\b([A-Z0-9]{2}[A-Z0-9\-]{4,})\b/i);
+      if(m&&!/part|name/i.test(m[1])){code=m[1].toUpperCase();break}
+    }
+  }
+
   return{code,name};
 }
 
