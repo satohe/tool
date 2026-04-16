@@ -662,7 +662,10 @@ function openAddModal(pre){
   document.getElementById('dup-mgmt-warn').style.display='none';
   document.getElementById('ocr-status').style.display='none';
   if(pre){
-    Object.keys(pre).forEach(k=>{const el=document.getElementById('f-'+k);if(el)el.value=pre[k]||''});
+    Object.keys(pre).filter(k=>!k.startsWith('_')).forEach(k=>{
+      const el=document.getElementById('f-'+k);
+      if(el&&pre[k]!=null)el.value=pre[k];
+    });
     if(pre._ocrDone)document.getElementById('ocr-status').style.display='block';
   }
   updateLocFilter();
@@ -807,7 +810,7 @@ function stopCamera(){
 function closeCamModal(){
   stopCamera();
   document.getElementById('cam-modal').classList.remove('open');
-  pendingMgmt=null;
+  /* pendingMgmtはここでリセットしない — OCR処理後に参照するため */
 }
 
 function showFallback(msg){
